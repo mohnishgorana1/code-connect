@@ -7,9 +7,9 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up",
 ]);
 
-export default clerkMiddleware((auth, req) => {
-  const { userId } = auth();
-
+export default clerkMiddleware(async (auth, req) => {
+  const { userId } = await auth();
+  console.log(userId)
   const currentUrl = new URL(req.url);
 
   const isAccessingHomePage = currentUrl.pathname === "/";

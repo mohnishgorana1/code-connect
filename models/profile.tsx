@@ -7,7 +7,7 @@ export enum Role {
 
 export interface IProfile extends Document {
   userAuthId: string;
-  name: string;
+  userName: string;
   email: string;
   role: Role;
   createdAt: Date;
@@ -21,7 +21,7 @@ const profileSchema = new mongoose.Schema<IProfile>({
     required: [true, "Authenticated UserId is required"],
     trim: true,
   },
-  name: {
+  userName: {
     type: String,
     required: [true, "Name is required"],
     trim: true,

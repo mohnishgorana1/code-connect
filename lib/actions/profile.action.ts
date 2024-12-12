@@ -1,6 +1,6 @@
 "use server";
 
-import Profile from "@/models/profile";
+import Profile from "@/models/profile.modal";
 import dbConnect from "../dbConnect";
 import { revalidatePath } from "next/cache";
 

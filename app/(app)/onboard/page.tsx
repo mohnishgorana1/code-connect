@@ -13,12 +13,12 @@ async function OnboardPage() {
 
   const profileInfo = await fetchProfileAction(user?.id);
 
-  if (user && profileInfo?._id) redirect("/");
+  // if (user && profileInfo?._id) redirect("/");
 
   console.log("user", user);
 
   return (
-    <main className="mt-4 w-full flex flex-col items-center gap-y-12 md:px-36">
+    <main className="px-2 sm:px-3 md:px-5 lg:px-40 mt-4 w-full flex flex-col items-center gap-y-12">
       <section className="hidden lg:flex w-full gap-y-4 flex-col text-center">
         <h1 className="font-bold md:text-7xl text-2xl hover:opacity-100 duration-200 opacity-50 ">
           Connect | Collaborate | Code

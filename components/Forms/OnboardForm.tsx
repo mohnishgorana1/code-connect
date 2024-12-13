@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { createProfileAction } from "@/lib/actions/profile.action";
 
 interface OnboardFormProps {

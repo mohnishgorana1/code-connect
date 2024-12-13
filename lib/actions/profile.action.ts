@@ -36,7 +36,7 @@ export const fetchProfileAction = async (id: string) => {
     if (!result) {
       console.log("Profle result cannt find", result);
     }
-    console.log("Profle result", result);
+    // console.log("Profle result", result);
 
     return JSON.parse(JSON.stringify(result));
   } catch (error) {

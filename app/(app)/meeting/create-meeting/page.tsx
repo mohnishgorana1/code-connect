@@ -1,25 +1,22 @@
-import Sidebar from "@/components/Sidebar";
+import CreateMeetingForm from "@/components/Forms/CreateMeetingForm";
 import { fetchProfileAction } from "@/lib/actions/profile.action";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import React from "react";
 
-async function Home() {
+const CreateMeetingPage = async() => {
   const user = await currentUser();
   if (!user) {
     redirect("/sign-up");
   }
   const profileInfo = await fetchProfileAction(user?.id);
+  return (
+    <div className="min-h-screen ">
+     
 
-  if (user && !profileInfo?._id) redirect("/onboard");
+      {/* Form */}
+      <CreateMeetingForm currentProfile={profileInfo}/>
+    </div>
+  );
+};
 
-  if (profileInfo?._id) {
-    return (
-      <>
-        <main className=""></main>
-      </>
-    );
-  }
-}
-
-export default Home;
+export default CreateMeetingPage;

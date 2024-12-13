@@ -21,7 +21,7 @@ export default async function AppLayout({
             <section className={``}>
               <Sidebar />
             </section>
-            <section className="min-h-[70vh] sm:h-auto border w-full bg-yellow-500">{children}</section>
+            <section className="min-h-[70vh] sm:h-auto sm:px-4 px-2 mt-8 sm:mt-0 w-full">{children}</section>
           </section>
         </div>
       </Suspense>

@@ -9,7 +9,11 @@ export interface IMeeting extends Document {
   interviewer: mongoose.Schema.Types.ObjectId | null;
   candidate: mongoose.Schema.Types.ObjectId | null;
   date: Date; // date for which interview held
-  time: string; // Store in ISO 8601 or hh:mm:ss format
+  time: {
+    hour: string;
+    minute: string;
+    period: "AM" | "PM";
+  };
   duration: number; // Duration in minutes , this is duration of meeting held (updated at end of meeting)
   passcode: string; // Unique passcode for the meeting
   status: "SCHEDULED" | "ONGOING" | "COMPLETED"; // Meeting status
@@ -35,8 +39,18 @@ const meetingSchema = new mongoose.Schema<IMeeting>({
     required: true,
   },
   time: {
-    type: String,
-    required: true,
+    hour: {
+      type: String,
+      required: true,
+    },
+    minute: {
+      type: String,
+      required: true,
+    },
+    period: {
+      type: String,
+      required: true,
+    },
   },
   duration: {
     type: Number,
@@ -45,7 +59,6 @@ const meetingSchema = new mongoose.Schema<IMeeting>({
   passcode: {
     type: String,
     required: true,
-    unique: true,
   },
   status: {
     type: String,
@@ -70,6 +83,7 @@ const meetingSchema = new mongoose.Schema<IMeeting>({
   },
 });
 
-const Meeting = mongoose.models.Meeting || mongoose.model("Meeting", meetingSchema);
+const Meeting =
+  mongoose.models.Meeting || mongoose.model("Meeting", meetingSchema);
 
 export default Meeting;

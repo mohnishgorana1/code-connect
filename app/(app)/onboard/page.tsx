@@ -1,4 +1,4 @@
-import OnboardForm from "@/components/OnboardForm";
+import OnboardForm from "@/components/Forms/OnboardForm";
 import { fetchProfileAction } from "@/lib/actions/profile.action";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";

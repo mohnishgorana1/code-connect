@@ -3,6 +3,7 @@ import Meeting from "@/models/meeting.modal";
 import dbConnect from "../dbConnect";
 
 export const createMeetingAction = async (
+  title: string,
   date: Date,
   time: { hour: string; minute: string; period: "AM" | "PM" },
   passcode: string,
@@ -11,16 +12,18 @@ export const createMeetingAction = async (
   await dbConnect();
   console.log(
     "Data received for meeting creation:",
+    title,
     date,
     time,
     passcode,
-    interviewer
+    interviewer,
   );
 
   try {
     console.log("Creating new Meeting");
     
     const newMeeting = await Meeting.create({
+      title,
       interviewer,
       candidate: null, // Assuming no candidate initially
       date,

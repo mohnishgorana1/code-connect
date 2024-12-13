@@ -6,6 +6,7 @@ export enum Role {
 }
 
 export interface IMeeting extends Document {
+  title: string;
   interviewer: mongoose.Schema.Types.ObjectId | null;
   candidate: mongoose.Schema.Types.ObjectId | null;
   date: Date; // date for which interview held
@@ -24,6 +25,10 @@ export interface IMeeting extends Document {
 }
 
 const meetingSchema = new mongoose.Schema<IMeeting>({
+  title: {
+    type: String,
+    required: true,
+  },
   interviewer: {
     type: Schema.Types.ObjectId,
     ref: "Profile",

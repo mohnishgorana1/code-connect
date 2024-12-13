@@ -21,6 +21,7 @@ function CreateMeetingForm({ currentProfile }: any) {
   const router = useRouter();
 
   const [isGeneratingMeetingLink, setIsGeneratingMeetingLink] = useState(false);
+  const [title, setTitle] = useState("");
   const [date, setDate] = React.useState<Date>();
   const [time, setTime] = useState({
     hour: "12",
@@ -30,6 +31,7 @@ function CreateMeetingForm({ currentProfile }: any) {
   const [passcode, setPasscode] = useState("");
   const [meetingLink, setMeetingLink] = useState("");
   const [responseData, setResponseData] = useState({
+    title: "",
     date: "",
     time: {
       hour: "",
@@ -47,11 +49,12 @@ function CreateMeetingForm({ currentProfile }: any) {
   const handleSubmit = async () => {
     setIsGeneratingMeetingLink(true);
     console.log("data", date, time, passcode);
-    // if (!date || !time || !passcode) {
-    //   return;
-    // }
+    if (!date || !time || !passcode || !title) {
+      return;
+    }
 
     const response = await createMeetingAction(
+      title,
       date,
       time,
       passcode,
@@ -64,6 +67,7 @@ function CreateMeetingForm({ currentProfile }: any) {
 
       setMeetingLink(response.data?.meetingLink);
       setResponseData({
+        title: response.data.title,
         date: response.data.date,
         time: response.data.time,
         passcode: response.data.passcode,
@@ -86,6 +90,18 @@ function CreateMeetingForm({ currentProfile }: any) {
         </header>
         {meetingLink === "" ? (
           <>
+            <div className="grid md:grid-cols-3 gap-y-1 items-center">
+              <Label className="text-sm md:text-lg col-span-1">Set Title</Label>
+              <Input
+                type="text"
+                name="title"
+                className="col-span-2 bg-black text-sm"
+                placeholder="Set title for meeting"
+                value={title}
+                onChange={(e: any) => setTitle(e.target.value)}
+                required
+              />
+            </div>
             <div className="grid md:grid-cols-3 gap-y-1 items-center">
               <Label className="text-sm md:text-lg col-span-1">
                 Select Meeting Date
@@ -174,6 +190,7 @@ function CreateMeetingForm({ currentProfile }: any) {
                 placeholder="Set Passcode"
                 value={passcode}
                 onChange={(e: any) => setPasscode(e.target.value)}
+                required
               />
             </div>
             <Button
@@ -193,6 +210,10 @@ function CreateMeetingForm({ currentProfile }: any) {
         ) : (
           <>
             <div className="w-full md:w-[60%] mx-auto flex flex-col border-x">
+              <span className="px-2 md:px-8 py-1 border-t border-y flex  justify-between  items-center">
+                <h1 className="text-lg font-semibold md:col-span-1">Title</h1>
+                <p>{responseData.title}</p>
+              </span>
               <span className="px-2 md:px-8 py-1 border-t border-y flex  justify-between  items-center">
                 <h1 className="text-lg font-semibold md:col-span-1">Date</h1>
                 <p>{formatToDDMMYYYY(responseData.date)}</p>

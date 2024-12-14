@@ -40,6 +40,7 @@ function CreateMeetingForm({ currentProfile }: any) {
     },
     passcode: "",
     status: "",
+    meetingLink: "",
   });
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -72,6 +73,7 @@ function CreateMeetingForm({ currentProfile }: any) {
         time: response.data.time,
         passcode: response.data.passcode,
         status: response.data.status,
+        meetingLink: response.data.meetingLink,
       });
       console.log("data setted to states");
     }
@@ -234,6 +236,12 @@ function CreateMeetingForm({ currentProfile }: any) {
               <span className="px-2 md:px-8 py-1 border-b flex  justify-between  items-center">
                 <h1 className="text-lg font-semibold md:col-span-1">Status</h1>
                 <p>{responseData.status}</p>
+              </span>
+              <span className="px-2 md:px-8 py-1 border-b flex  justify-between  items-center">
+                <h1 className="text-lg font-semibold md:col-span-1">
+                  Meeting Link
+                </h1>
+                <p>{meetingLink}</p>
               </span>
             </div>
             <Button className="bg-blue-700 hover:bg-blue-800 font-semibold md:w-[60%] self-center">

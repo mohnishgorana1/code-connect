@@ -6,8 +6,8 @@ import { revalidatePath } from "next/cache";
 
 export const createProfileAction = async (
   userAuthId: string,
-  email: string,
   userName: string,
+  email: string,
   role: string,
   pathToRevalidate: string
 ) => {
@@ -15,7 +15,12 @@ export const createProfileAction = async (
 
   try {
     const profileData = { userName, email, role, userAuthId };
-    const newProfile = await Profile.create(profileData);
+    const newProfile = await Profile.create({
+      userAuthId,
+      userName,
+      email,
+      role,
+    });
 
     if (!newProfile) {
       console.log("Failed to create new Profile");

@@ -16,6 +16,7 @@ async function OnboardPage() {
   // if (user && profileInfo?._id) redirect("/");
 
   console.log("user", user);
+  console.log("EMAIL", user.emailAddresses[0].emailAddress);
 
   return (
     <main className="px-2 sm:px-3 md:px-5 lg:px-40 mt-4 w-full flex flex-col items-center gap-y-12">

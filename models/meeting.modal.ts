@@ -9,6 +9,9 @@ export interface IMeeting extends Document {
   title: string;
   interviewer: mongoose.Schema.Types.ObjectId | null;
   candidate: mongoose.Schema.Types.ObjectId | null;
+  isCandidateJoined: boolean;
+  isInterviewerJoined: boolean;
+  status: "SCHEDULED" | "ONGOING" | "COMPLETED" | "JOINED"; // Meeting status
   date: Date; // date for which interview held
   time: {
     hour: string;
@@ -17,7 +20,6 @@ export interface IMeeting extends Document {
   };
   duration: number; // Duration in minutes , this is duration of meeting held (updated at end of meeting)
   passcode: string; // Unique passcode for the meeting
-  status: "SCHEDULED" | "ONGOING" | "COMPLETED"; // Meeting status
   meetingLink: string; // Video conferencing link // that will like : /meeting/${id}
   createdAt: Date;
   updatedAt: Date;
@@ -38,6 +40,14 @@ const meetingSchema = new mongoose.Schema<IMeeting>({
     type: Schema.Types.ObjectId,
     ref: "Profile",
     default: null,
+  },
+  isCandidateJoined: {
+    type: Boolean,
+    default: false,
+  },
+  isInterviewerJoined: {
+    type: Boolean,
+    default: false,
   },
   date: {
     type: Date,
@@ -64,6 +74,7 @@ const meetingSchema = new mongoose.Schema<IMeeting>({
   passcode: {
     type: String,
     required: true,
+    unique: true,
   },
   status: {
     type: String,

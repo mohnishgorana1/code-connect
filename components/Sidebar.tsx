@@ -31,8 +31,8 @@ function Sidebar() {
 
   return (
     <section
-      className={`rounded-r-lg my-4 sm:my-0 sm:border-r max-h-full bg-neutral-900 ${
-        currentPathName === "/onboard" && "hidden"
+      className={`rounded-r-lg my-4 sm:my-0 hidden sm:border-r max-h-full bg-neutral-900 ${
+        (currentPathName === "/onboard" ) && "hidden"
       }`}
     >
       <ul className="grid grid-cols-2 sm:grid-cols-1 gap-y-2 sm:gap-y-0 ">

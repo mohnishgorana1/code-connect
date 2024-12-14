@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import JoinMeetingForm from "./Forms/JoinMeetingForm";
 import { Button } from "./ui/button";
 import { exitMeetingAction } from "@/lib/actions/meeting.action";
@@ -13,15 +13,34 @@ function Meeting({
   currentProfile: any;
 }) {
   const [isJoined, setIsJoined] = useState(false);
-  const [isExiting, setIsExiting] = useState(false)
+  const [isExiting, setIsExiting] = useState(false);
   const [isExited, setIsExited] = useState(false);
+
+  useEffect(() => {
+    function initiateJoinStatus() {
+      if (currentProfile.role === "CANDIDATE") {
+        if (currentMeeting.isCandidateJoined) {
+          setIsJoined(true);
+        } else {
+          setIsJoined(false);
+        }
+      } else {
+        if (currentMeeting.isInterviewerJoined) {
+          setIsJoined(true);
+        } else {
+          setIsJoined(false);
+        }
+      }
+    }
+    initiateJoinStatus();
+  }, []);
 
   const exitMeeting = async () => {
     try {
       console.log("Exiting");
       console.log("Curr profile", currentProfile);
-      
-      setIsExiting(true)
+
+      setIsExiting(true);
       const response = await exitMeetingAction(
         currentMeeting._id,
         currentProfile._id,
@@ -43,8 +62,8 @@ function Meeting({
       }
     } catch (error: any) {
       console.error("Error Exiting meeting:", error);
-    }finally{
-      setIsExiting(false)
+    } finally {
+      setIsExiting(false);
     }
   };
   return (
@@ -61,11 +80,18 @@ function Meeting({
       ) : (
         <>
           <div>Already Joined</div>
-          <Button className="bg-red-500 hover:bg-red-600" onClick={exitMeeting}> {
-            !isExited ? "Exit Meeting" : <>
-              <Loader2 className="animate-spin"/> Exiting...
-            </>
-          }</Button>
+          <Button
+            className={`bg-red-500 hover:bg-red-600 ${isExiting && "hidden"}`}
+            onClick={exitMeeting}
+          >
+            {isJoined && "Exit Meeting"}
+          </Button>
+          <Button
+            className={`bg-red-500 hover:bg-red-600 ${isJoined && !isExiting && "hidden"}`}
+            disabled={isExiting}
+          >
+            <Loader2 className="animate-spin"/> Exiting...
+          </Button>
         </>
       )}
     </main>

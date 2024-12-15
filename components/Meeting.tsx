@@ -78,21 +78,29 @@ function Meeting({
           />
         </>
       ) : (
-        <>
-          <div>Already Joined</div>
-          <Button
-            className={`bg-red-500 hover:bg-red-600 ${isExiting && "hidden"}`}
-            onClick={exitMeeting}
-          >
-            {isJoined && "Exit Meeting"}
-          </Button>
-          <Button
-            className={`bg-red-500 hover:bg-red-600 ${isJoined && !isExiting && "hidden"}`}
-            disabled={isExiting}
-          >
-            <Loader2 className="animate-spin"/> Exiting...
-          </Button>
-        </>
+        <main className="flex flex-col gap-y-2">
+          <header className="w-full flex items-center justify-between">
+            <div>Already Joined</div>
+            <Button
+              className={`bg-red-500 hover:bg-red-600 ${isExiting && "hidden"}`}
+              onClick={exitMeeting}
+            >
+              {isJoined && "Exit Meeting"}
+            </Button>
+            <Button
+              className={`bg-red-500 hover:bg-red-600 ${
+                isJoined && !isExiting && "hidden"
+              }`}
+              disabled={isExiting}
+            >
+              <Loader2 className="animate-spin" /> Exiting...
+            </Button>
+          </header>
+          {/* video setup */}
+          <section className="">
+            
+          </section>
+        </main>
       )}
     </main>
   );

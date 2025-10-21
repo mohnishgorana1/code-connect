@@ -1,4 +1,4 @@
-import { IUser } from "../types/models.types"
+import { IUser, Role } from "../types/models.types";
 import { Schema, model, models, Document } from "mongoose";
 
 interface IUserDoc extends IUser, Document {}
@@ -31,11 +31,11 @@ const userSchema = new Schema<IUserDoc>(
     },
     role: {
       type: String,
-      enum: ["candidate", "interviewer"],
-      default: "candidate",
+      enum: Object.values(Role),
+      default: Role.Candidate,
     },
     avatar: {
-      type: String, // optional 
+      type: String, // optional
     },
   },
   { timestamps: true }

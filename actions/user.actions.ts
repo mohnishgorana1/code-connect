@@ -1,6 +1,7 @@
 "use server";
 import connectDB from "@/lib/config/db";
 import { User } from "@/models/user.model";
+import { Role } from "@/types/models.types";
 
 /**
  * Create a user in MongoDB when Clerk user is created
@@ -47,7 +48,7 @@ export const createAccountInDatabase = async (
       email,
       phone,
       dob: dob || new Date(),
-      role: "candidate",
+      role: Role.Candidate,
     });
 
     console.log("✅ User created in DB:", email);

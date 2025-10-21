@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { GraduationCap, Menu } from "lucide-react";
+import { Code2, GraduationCap, Menu, Plug } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -19,62 +19,66 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import { navLinks } from "@/constants/navlinks";
+import { useAppUser } from "@/contexts/UserContext";
 
 export default function Header() {
   const pathname = usePathname();
   const { user, isSignedIn } = useUser();
   const [open, setOpen] = useState(false);
+  const { appUser } = useAppUser();
 
-  // Conditional background class
-  const headerClasses =
-    pathname === "/" ? "text-indigo-400" : "bg-neutral-900 text-indigo-500";
   return (
-    <header className={`w-full sticky top-0 z-50 0  ${headerClasses} `}>
-      <div className="max-w-7xl md:max-w-[99%] mx-auto flex items-center justify-between px-4 py-4">
+    <header className="w-full sticky top-0 z-50 bg-gray-950">
+      <div className="max-w-7xl md:max-w-[99%] mx-auto flex items-center justify-between px-4 py-5">
         {/* Logo */}
-        <div className="">
-          <Link href="/" className="text-2xl font-bold  flex items-center ">
-            <GraduationCap size={24} className="mt-1 mr-1" />
-            Code Connect
-          </Link>
-        </div>
+
+        <Link
+          href="/"
+          className="text-xl md:text-2xl font-semibold tracking-tight flex items-center group transition-all duration-300"
+        >
+          <Plug
+            size={26}
+            className="text-indigo-400 group-hover:rotate-12 transition-transform duration-300"
+          />
+          <span className="bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-indigo-500 font-bold tracking-tight">
+            CodeConnect
+          </span>
+        </Link>
+
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium transition-colors ${
-                pathname === link.href
-                  ? "text-indigo-400"
-                  : "text-neutral-300 hover:text-indigo-400"
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-          {/* {isSignedIn && (
-            <Link
-              href={dashboardPath}
-              className={`text-sm font-medium transition-colors ${
-                pathname === dashboardPath
-                  ? "text-indigo-400"
-                  : "text-neutral-300 hover:text-indigo-400"
-              }`}
-            >
-              Dashboard
-            </Link>
-          )} */}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative text-sm font-medium transition-all duration-300 ${
+                  isActive
+                    ? "text-indigo-400"
+                    : "text-gray-300 hover:text-indigo-400"
+                }`}
+              >
+                {link.name}
+                <span
+                  className={`absolute left-0 -bottom-1 h-[2px] rounded-full bg-indigo-500 transition-all duration-300 ${
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
-        {/* Auth Buttons */}
-        <div className="hidden md:flex items-center gap-3">
+
+        {/* Right Section */}
+        <div className="hidden md:flex items-center gap-4">
           {isSignedIn ? (
             <>
               <UserButton afterSignOutUrl="/" />
               <SignOutButton>
                 <Button
                   variant="outline"
-                  className="border-neutral-700 text-neutral-200 hover:text-indigo-400"
+                  className="border-neutral-700 text-gray-200 hover:text-indigo-400 transition-all duration-300"
                 >
                   Sign Out
                 </Button>
@@ -82,13 +86,13 @@ export default function Header() {
             </>
           ) : (
             <SignInButton mode="modal">
-              {/* Changed bg-indigo-600/700 from blue/indigo to maintain palette */}
-              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300">
                 Sign In
               </Button>
             </SignInButton>
           )}
         </div>
+
         {/* Mobile Menu */}
         <div className="md:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
@@ -96,51 +100,44 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-neutral-300 hover:text-indigo-400"
+                className="text-gray-300 hover:text-indigo-400 transition-all duration-300"
               >
                 <Menu className="w-6 h-6" />
               </Button>
             </SheetTrigger>
+
             <SheetContent
               side="right"
-              className="bg-neutral-900 border-neutral-800"
+              className="bg-gray-950 border-neutral-800"
             >
               <SheetHeader>
                 <SheetTitle>
                   <Link
                     href="/"
-                    className="text-2xl font-bold text-indigo-500 flex items-center "
+                    onClick={() => setOpen(false)}
+                    className="text-2xl font-semibold text-indigo-400 flex items-center gap-2"
                   >
-                    <GraduationCap size={24} className="mt-1 mr-1" />
-                    Examify
+                    <GraduationCap size={24} />
+                    Code Connect
                   </Link>
                 </SheetTitle>
               </SheetHeader>
+
               <div className="flex flex-col gap-5 mt-6 items-center justify-center w-full">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className={`text-lg font-medium ${
+                    className={`text-lg font-medium transition-all duration-300 ${
                       pathname === link.href
                         ? "text-indigo-400"
-                        : "text-neutral-300 hover:text-indigo-400"
+                        : "text-gray-300 hover:text-indigo-400"
                     }`}
                   >
                     {link.name}
                   </Link>
                 ))}
-                {/* <Link
-                  href={dashboardPath}
-                  className={`text-lg font-medium transition-colors ${
-                    pathname === dashboardPath
-                      ? "text-indigo-400"
-                      : "text-neutral-300 hover:text-indigo-400"
-                  }`}
-                >
-                  <span>{appUser?.role === "admin" && "Admin"}</span> Dashboard
-                </Link> */}
 
                 <div className="w-full pt-5 border-t border-neutral-800 flex flex-col gap-3 px-3">
                   {isSignedIn ? (
@@ -149,7 +146,7 @@ export default function Header() {
                       <SignOutButton>
                         <Button
                           variant="outline"
-                          className="border-neutral-700 text-neutral-200 hover:text-indigo-400"
+                          className="border-neutral-700 text-gray-200 hover:text-indigo-400 transition-all duration-300"
                         >
                           Sign Out
                         </Button>
@@ -157,7 +154,7 @@ export default function Header() {
                     </span>
                   ) : (
                     <SignInButton mode="modal">
-                      <Button className="bg-indigo-600 hover:bg-indigo-700 text-white w-full">
+                      <Button className="bg-indigo-600 hover:bg-indigo-700 text-white w-full transition-all duration-300">
                         Sign In
                       </Button>
                     </SignInButton>

@@ -1,8 +1,9 @@
+import HomePageContent from "@/components/HomePage/HomePageContent";
 import React from "react";
 async function HomePage() {
   return (
-    <main className="bg-neutral-900">
-      
+    <main className="">
+      <HomePageContent />
     </main>
   );
 }

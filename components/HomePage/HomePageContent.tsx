@@ -13,14 +13,15 @@ import {
   BarChart,
   Clock,
   ClipboardList,
-  Link,
   MessageSquare,
   Target,
   Terminal,
   Check,
+  Link,
   ChevronDown,
   Plug,
 } from "lucide-react";
+import AnchorLink from "next/link";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -69,8 +70,7 @@ const TitleWord = ({ children }) => (
     variants={itemVariants}
     style={{ display: "inline-block" }}
   >
-     
-    {children}
+     {children}
   </motion.span>
 );
 const HeroSection = () => {
@@ -82,23 +82,18 @@ const HeroSection = () => {
     <section className="text-center mb-20">
       <motion.h1
         className="text-5xl sm:text-7xl font-extrabold tracking-tight mb-4"
-        // The hero section title uses animate on mount, so it doesn't need the whileInView fix
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        {/* Line 1: CodeConnect (with gradient) */}
         <span className="bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-indigo-500">
-          
           {titleWords1.map((word, index) => (
             <TitleWord key={index}>{word}</TitleWord>
           ))}
         </span>
 
-        {/* Line 2: Live Interview Platform (white, block display) */}
         <span className="block text-gray-200 mt-2">
           {titleWords2.map((word, index) => (
-            // Use a unique key by adding the length of the first array
             <TitleWord key={titleWords1.length + index}>{word}</TitleWord>
           ))}
         </span>
@@ -122,7 +117,9 @@ const HeroSection = () => {
         }}
         whileTap={{ scale: 0.95 }}
       >
-        Start Your Live Session
+        <AnchorLink href={"/meeting/create"}>
+          Start Your Live Session
+        </AnchorLink>
         <ArrowRight className="ml-2 w-5 h-5" />
       </motion.button>
     </section>

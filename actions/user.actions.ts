@@ -1,7 +1,6 @@
 "use server";
 import connectDB from "@/lib/config/db";
-import { User } from "@/models/user.model";
-import { Role } from "@/types/models.types";
+import { Role, User } from "@/models/user.model";
 
 /**
  * Create a user in MongoDB when Clerk user is created

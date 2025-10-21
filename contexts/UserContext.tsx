@@ -3,7 +3,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
-import { Role } from "@/types/models.types";
+import { Role } from "@/models/user.model";
+
 
 interface AppUser {
   _id: string;

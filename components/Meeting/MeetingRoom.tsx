@@ -5,7 +5,6 @@ import {
   CallingState,
   CallParticipantsList,
   CallStatsButton,
-  PaginatedGridLayout,
   SpeakerLayout,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
@@ -15,7 +14,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import EndCallButton from "./EndCallButton";
 import Loader from "../Loader";
 import { Button } from "../ui/button";
-type CallLayoutType = "grid" | "speaker-left" | "speaker-right";
 
 function MeetingRoom() {
   const router = useRouter();
@@ -30,22 +28,21 @@ function MeetingRoom() {
   if (callingState !== CallingState.JOINED) return <Loader />;
 
   return (
-    <section className="w-full flex gap-1 h-screen px-1 mb-2">
+    <section className="w-full flex gap-1 min-h-[89vh] px-1 mb-2">
       {/* left video panels with call controls collapsible */}
       <aside
-        className={cn("bg-gray-900 rounded-md  transition-all duration-200 ease-linear h-full", {
+        className={cn("min-h-full bg-gray-900 rounded-md transition-all duration-200 ease-linear", {
           "w-[30%] border-r": showVideoPane,
           "w-0": !showVideoPane,
         })}
       >
         {showVideoPane && (
-          <div className="pl-0 p-2">
-            {/* <PaginatedGridLayout groupSize={10}/> */}
-            <div className="max-h-[80vh]">
+          <div className="p-2 flex flex-col justify-between min-h-full">
+            <div className="">
               <SpeakerLayout participantsBarPosition={"bottom"} />
             </div>
 
-            <div className="flex flex-col flex-wrap px-4 bg-gray-700/20  rounded-xl ml-2">
+            <div className="flex flex-col flex-wrap px-4 bg-gray-700/20 rounded-xl ml-2 ">
               <div className="flex justify-center items-center w-full gap-2 flex-wrap">
                 <CallControls onLeave={() => router.push("/")} />
               </div>
@@ -69,7 +66,7 @@ function MeetingRoom() {
                   <PanelLeftClose size={20} />
                 </Button>
               </div>
-              <span className="flex items-center justify-center mt-2">
+              <span className="flex items-center justify-center my-2">
                 {!isPersonalRoom && <EndCallButton />}
               </span>
             </div>
@@ -96,7 +93,7 @@ function MeetingRoom() {
           }
         )}
       >
-        <div className="">
+        <div className="w-full text-white py-4 px-2">
           <p>Coding Screen / Whiteboard Interface</p>
         </div>
       </main>
@@ -117,6 +114,8 @@ function MeetingRoom() {
         )}
       </div>
     </section>
+
+   
   );
 }
 

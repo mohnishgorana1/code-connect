@@ -196,7 +196,7 @@ export default function LiveMeetingRoomPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col bg-gray-950">
+    <main className="flex flex-col bg-gray-950">
       {/* --- Stream Meeting Content --- */}
       <section className="">
         <div className="text-gray-400 italic">

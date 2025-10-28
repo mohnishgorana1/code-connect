@@ -16,6 +16,7 @@ import MeetingStream from "@/components/Meeting/MeetingStream";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
+import LiveblocksMeetingProvider from "@/contexts/LiveblocksProvider";
 
 export default function LiveMeetingRoomPage() {
   const { meetingId } = useParams();
@@ -202,11 +203,14 @@ export default function LiveMeetingRoomPage() {
         <div className="text-gray-400 italic">
           {/* 🎥 Meeting interface will render here (video, mic, screen share, etc.) */}
           {meetingData && (
-            <MeetingStream
-              meetingId={meetingData._id}
-              meetingData={meetingData}
-              meetingLink={meetingLink}
-            />
+            <LiveblocksMeetingProvider meetingId={meetingId as string}>
+              {" "}
+              <MeetingStream
+                meetingId={meetingData._id}
+                meetingData={meetingData}
+                meetingLink={meetingLink}
+              />{" "}
+            </LiveblocksMeetingProvider>
           )}
         </div>
       </section>

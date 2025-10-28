@@ -806,7 +806,7 @@ const FinalCallToAction = () => (
 function HomePageContent() {
   return (
     <motion.main
-      className="min-h-screen bg-gray-950 text-white font-inter p-4 sm:p-8"
+      className="min-h-screen bg-gray-950 text-white font-inter p-4 sm:p-8 home-scrollbar"
       initial="hidden"
       animate="visible"
       // This section uses 'animate' which runs on mount, so no 'once: true' issue here

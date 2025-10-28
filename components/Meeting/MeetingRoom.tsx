@@ -14,6 +14,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import EndCallButton from "./EndCallButton";
 import Loader from "../Loader";
 import { Button } from "../ui/button";
+import CollaborativeEditor from "../CodeEditor/CollaborativeEditor";
 
 function MeetingRoom() {
   const router = useRouter();
@@ -28,16 +29,19 @@ function MeetingRoom() {
   if (callingState !== CallingState.JOINED) return <Loader />;
 
   return (
-    <section className="w-full flex gap-1 min-h-[89vh] px-1 mb-2">
+    <section className="w-full flex gap-1 px-2 mb-2 h-auto">
       {/* left video panels with call controls collapsible */}
       <aside
-        className={cn("min-h-full bg-gray-900 rounded-md transition-all duration-200 ease-linear", {
-          "w-[30%] border-r": showVideoPane,
-          "w-0": !showVideoPane,
-        })}
+        className={cn(
+          "max-h-[89vh] bg-gray-900 rounded-md transition-all duration-200 ease-linear",
+          {
+            "w-[30%] border-r": showVideoPane,
+            "w-0": !showVideoPane,
+          }
+        )}
       >
         {showVideoPane && (
-          <div className="p-2 flex flex-col justify-between min-h-full">
+          <div className="p-2 flex flex-col justify-between">
             <div className="">
               <SpeakerLayout participantsBarPosition={"bottom"} />
             </div>
@@ -86,15 +90,20 @@ function MeetingRoom() {
       {/* coding interface */}
       <main
         className={cn(
-          "bg-gray-900 border px-2 md:px-4 rounded-md transition-all duration-200 ease-linear",
+          "no-scrollbar max-h-[89vh] overflow-y-scroll bg-gray-900 border px-2 md:px-4 rounded-md transition-all duration-200 ease-linear",
           {
             "w-[70%]": showVideoPane,
             "w-full": !showVideoPane,
           }
         )}
       >
-        <div className="w-full text-white py-4 px-2">
-          <p>Coding Screen / Whiteboard Interface</p>
+        <div className="w-full h-full text-white">
+          <p className="text-xl font-semibold border-b py-2 border-gray-700">
+            Collaborative Code Editor <strong className="opacity-50 text-sm font-mono font-semibold">(Typescript and Javascript Only)</strong>
+          </p>
+          <div className="">
+            <CollaborativeEditor />
+          </div>
         </div>
       </main>
 
@@ -114,8 +123,6 @@ function MeetingRoom() {
         )}
       </div>
     </section>
-
-   
   );
 }
 

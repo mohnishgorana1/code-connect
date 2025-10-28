@@ -140,3 +140,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+.str-video__paginated-grid-layout__group{
+  display: flex;
+  flex-direction: column;
+}

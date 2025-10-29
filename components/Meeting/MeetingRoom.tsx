@@ -29,11 +29,11 @@ function MeetingRoom() {
   if (callingState !== CallingState.JOINED) return <Loader />;
 
   return (
-    <section className="w-full flex gap-1 px-2 mb-2 h-auto">
-      {/* left video panels with call controls collapsible */}
+    <section className="w-full flex items-stretch gap-1 px-2 mb-2 min-h-[89vh]">
+      {/* Left video panels with call controls collapsible */}
       <aside
         className={cn(
-          "max-h-[89vh] bg-gray-900 rounded-md transition-all duration-200 ease-linear",
+          "bg-gray-900 rounded-md transition-all duration-200 ease-linear overflow-hidden shrink-0",
           {
             "w-[30%] border-r": showVideoPane,
             "w-0": !showVideoPane,
@@ -41,16 +41,14 @@ function MeetingRoom() {
         )}
       >
         {showVideoPane && (
-          <div className="p-2 flex flex-col justify-between">
-            <div className="">
+          <div className="p-2 flex flex-col justify-between h-full">
+            <div className="flex-1">
               <SpeakerLayout participantsBarPosition={"bottom"} />
             </div>
 
-            <div className="flex flex-col flex-wrap px-4 bg-gray-700/20 rounded-xl ml-2 ">
-              <div className="flex justify-center items-center w-full gap-2 flex-wrap">
+            <div className="flex flex-col flex-wrap px-4 bg-gray-700/20 rounded-xl mt-2">
+              <div className="flex justify-center items-center w-full gap-2 flex-wrap pb-3">
                 <CallControls onLeave={() => router.push("/")} />
-              </div>
-              <div className="flex flex-wrap gap-2 items-center justify-center">
                 <CallStatsButton />
                 <Button
                   onClick={() => setShowParticipants((prev) => !prev)}
@@ -69,10 +67,8 @@ function MeetingRoom() {
                 >
                   <PanelLeftClose size={20} />
                 </Button>
-              </div>
-              <span className="flex items-center justify-center my-2">
                 {!isPersonalRoom && <EndCallButton />}
-              </span>
+              </div>
             </div>
           </div>
         )}
@@ -87,10 +83,10 @@ function MeetingRoom() {
         )}
       </aside>
 
-      {/* coding interface */}
+      {/* Right coding interface */}
       <main
         className={cn(
-          "no-scrollbar max-h-[89vh] overflow-y-scroll bg-gray-900 border px-2 md:px-4 rounded-md transition-all duration-200 ease-linear",
+          "overflow-y-auto bg-gray-900 border px-2 md:px-4 rounded-md transition-all duration-200 ease-linear grow",
           {
             "w-[70%]": showVideoPane,
             "w-full": !showVideoPane,
@@ -99,7 +95,10 @@ function MeetingRoom() {
       >
         <div className="w-full h-full text-white">
           <p className="text-xl font-semibold border-b py-2 border-gray-700">
-            Collaborative Code Editor <strong className="opacity-50 text-sm font-mono font-semibold">(Typescript and Javascript Only)</strong>
+            Collaborative Code Editor{" "}
+            <strong className="opacity-50 text-sm font-mono font-semibold">
+              (Typescript and Javascript Only)
+            </strong>
           </p>
           <div className="">
             <CollaborativeEditor />
@@ -107,7 +106,7 @@ function MeetingRoom() {
         </div>
       </main>
 
-      {/* FLoating Participant list comes from right ride */}
+      {/* Floating Participant list */}
       <div
         className={cn(
           "absolute top-0 right-0 h-full z-20 transition-transform duration-300 ease-linear",

@@ -145,81 +145,10 @@
   display: flex;
   flex-direction: column;
 }
-/* 
-::-webkit-scrollbar {
-  width: 4px;
-}
+.str-video__call-controls{
+  display: flex;
+  flex-wrap: wrap;
 
-::-webkit-scrollbar-track {
-  background: #111827;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #4c4d4d;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #00bcd8;
-}
-
-.html{
-  scrollbar-color: #323334 #111827;
-  scrollbar-width: 1px;
-}
-
-.custom-scrollbar{
-  scrollbar-color: #323334 #111827;
-  scrollbar-width: 1px;
-}
-.no-scrollbar{
-  scrollbar-color: #323334 #111827;
-  scrollbar-width: 1px;
-} */
-
-
-
-/* ----------------------------------------------------------------
-   1. GLOBAL NEUTRAL SCROLLBAR STYLES (WebKit)
-   Applies a thin, subtle scrollbar across the entire application 
-   (Chrome, Safari, Edge).
-   ---------------------------------------------------------------- */
-
-/* Scrollbar Container - Size */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-/* Scrollbar Track (Background) - Dark Mode Neutral */
-::-webkit-scrollbar-track {
-    background: #1e293b; /* Slate Gray 800 - Deep, dark background */
-    border-radius: 4px;
-}
-
-/* Scrollbar Thumb (Draggable Element) - Neutral Gray */
-::-webkit-scrollbar-thumb {
-    background-color: #475569; /* Slate Gray 600 - Neutral thumb color */
-    border-radius: 4px;
-    /* Border matching the track to give the thumb visual padding */
-    border: 1px solid #1e293b;
-}
-
-/* Scrollbar Thumb Hover State */
-::-webkit-scrollbar-thumb:hover {
-    background-color: #64748b; /* Slate Gray 500 - Lighter on hover */
-}
-
-/* ----------------------------------------------------------------
-   2. FIREFOX GLOBAL SUPPORT
-   Applies global styles for Firefox.
-   ---------------------------------------------------------------- */
-html {
-    /* Sets thumb color and track color */
-    scrollbar-color: #475569 #1e293b; 
-    /* Sets scrollbar to be thinner than default */
-    scrollbar-width: thin; 
 }
 
 

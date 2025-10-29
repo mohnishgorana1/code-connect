@@ -1,6 +1,9 @@
 // File: components/CodeEditor/CollaborativeEditor.tsx
 
 "use client";
+import * as monaco from "monaco-editor";
+import "monaco-editor/esm/vs/basic-languages/cpp/cpp.contribution";
+import "monaco-editor/esm/vs/basic-languages/python/python.contribution";
 
 import { getYjsProviderForRoom } from "@liveblocks/yjs";
 // Update the import path to match the new config file
@@ -9,13 +12,21 @@ import { useCallback, useEffect, useState } from "react";
 import { Editor } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 import { MonacoBinding } from "y-monaco";
+import { CODE_TEMPLATES } from "@/constants/code-editor-data";
 // Removed: import { Awareness } from "y-protocols/awareness";
 // We will use the type provided by the provider or safely cast.
 
-export default function CollaborativeEditor() {
+export default function CollaborativeEditor({
+  language = "typescript",
+}: {
+  language?: string;
+}) {
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>();
   const room = useRoom();
   const yProvider = getYjsProviderForRoom(room);
+
+  const [codeByLang, setCodeByLang] =
+    useState<Record<string, string>>(CODE_TEMPLATES);
 
   // Set up Liveblocks Yjs provider and attach Monaco editor
   useEffect(() => {
@@ -52,8 +63,14 @@ export default function CollaborativeEditor() {
       height="89vh" // FIX: Changed from '100vh' to '100%'
       width="100%" // FIX: Changed from '100hw' to '100%'
       theme="vs-dark" // Optional: Dark theme is better for code
-      defaultLanguage="typescript"
-      defaultValue="// Start coding here...(Javascript and TypeScript only)"
+      // defaultLanguage="typescript"
+      // defaultValue="// Start coding here...(Javascript and TypeScript only)"
+      language={language}
+      defaultValue={`// Start coding here (${language})`}
+      value={codeByLang[language]}
+      onChange={(value) =>
+        setCodeByLang((prev) => ({ ...prev, [language]: value || "" }))
+      }
       options={{
         tabSize: 2,
         minimap: { enabled: false },
@@ -61,4 +78,3 @@ export default function CollaborativeEditor() {
     />
   );
 }
-

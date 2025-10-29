@@ -25,6 +25,7 @@ function MeetingRoom() {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
   const [showVideoPane, setShowVideoPane] = useState(true);
+  const [language, setLanguage] = useState("typescript");
 
   if (callingState !== CallingState.JOINED) return <Loader />;
 
@@ -93,15 +94,24 @@ function MeetingRoom() {
           }
         )}
       >
-        <div className="w-full h-full text-white">
-          <p className="text-xl font-semibold border-b py-2 border-gray-700">
-            Collaborative Code Editor{" "}
-            <strong className="opacity-50 text-sm font-mono font-semibold">
-              (Typescript and Javascript Only)
-            </strong>
+        <div className="w-full h-full text-white flex flex-col gap-y-3">
+          <p className="text-xl font-semibold">
+            Collaborative Code Editor
+            <span className="opacity-60 text-sm ml-2">({language})</span>
           </p>
+          <select
+            className="bg-gray-800 text-white rounded-md px-3 py-1 w-44"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+          >
+            <option value="typescript">TypeScript</option>
+            <option value="javascript">JavaScript</option>
+            <option value="cpp">C++</option>
+             <option value="cpp">C</option>
+            <option value="python">Python</option>
+          </select>
           <div className="">
-            <CollaborativeEditor />
+            <CollaborativeEditor language={language}/>
           </div>
         </div>
       </main>

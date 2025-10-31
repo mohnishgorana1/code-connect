@@ -67,11 +67,11 @@ export const FeaturesSection = () => {
         {features.slice(2, 3).map((feature) => (
           <motion.div
             key={2}
-            className="md:col-span-8 p-8 bg-indigo-900/40 flex flex-col gap-5 rounded-l-lg"
+            className="md:col-span-8 p-8 bg-indigo-950/50 flex flex-col gap-5 rounded-l-lg"
             variants={itemVariants}
           >
             <div className="flex items-center justify-start">
-              <feature.icon className="w-12 h-12 text-pink-400 mr-4 p-2 bg-indigo-900 rounded-full shadow-lg" />
+              <feature.icon className="w-12 h-12 text-pink-400 mr-4 p-2 bg-indigo-950 rounded-full shadow-lg" />
               <h3 className="text-3xl font-extrabold text-white">
                 {feature.title}
               </h3>

@@ -33,7 +33,7 @@ function AboutPage() {
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.2 }} // Trigger animations when 20% of the main section is visible
+        viewport={{ amount: 0.2 }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
           <motion.div className="text-center py-16" variants={itemVariants}>
@@ -52,79 +52,120 @@ function AboutPage() {
             </motion.p>
           </motion.div>
 
-          {/* --- 2. OUR MISSION & STORY --- */}
-          <motion.div
-            className="grid md:grid-cols-2 gap-12 items-start bg-gray-900 p-8 rounded-xl shadow-xl border border-gray-800"
-            variants={itemVariants}
-          >
-            <div>
+          <motion.div className="space-y-16" variants={itemVariants}>
+            <motion.div
+              className="text-center max-w-4xl mx-auto"
+              variants={itemVariants}
+            >
               <motion.h3
-                className="text-3xl font-bold mb-4 text-cyan-400"
+                className="text-4xl font-extrabold mb-4 text-indigo-300"
                 variants={itemVariants}
               >
-                Our Origin Story
+                Our Purpose: Competence Over Anxiety
               </motion.h3>
               <motion.p
-                className="text-gray-300 leading-relaxed"
+                className="text-gray-300 text-lg leading-relaxed"
                 variants={itemVariants}
               >
-                Founded by a team of engineers and recruiters tired of
-                fragmented tooling, we envisioned a single, comprehensive
-                platform. We started with a simple collaborative editor and
-                quickly realized the power of integrating high-fidelity video,
-                real-time code execution, and structured assessment into one
-                flow. Our goal is to measure competence, not performance
-                anxiety.
+                Founded by engineers and recruiters tired of fragmented tooling,
+                we envisioned a single, comprehensive platform that shifts the
+                focus from performance pressure back to genuine technical merit.
               </motion.p>
-            </div>
-            <div>
-              <motion.h3
-                className="text-3xl font-bold mb-4 text-indigo-400"
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-10">
+              <motion.div
+                className="p-6 rounded-lg border-l-4 border-cyan-500 bg-gray-900/70 shadow-lg"
                 variants={itemVariants}
               >
-                The Vision
-              </motion.h3>
-              <motion.p
-                className="text-gray-300 leading-relaxed"
+                <motion.h4
+                  className="text-2xl font-bold mb-3 text-cyan-400"
+                  variants={itemVariants}
+                >
+                  Our Origin Story
+                </motion.h4>
+                <motion.p
+                  className="text-gray-300 leading-relaxed"
+                  variants={itemVariants}
+                >
+                  We started with a simple collaborative editor and quickly
+                  realized the power of integrating high-fidelity video,
+                  real-time code execution, and structured assessment into one
+                  flow. Our goal is to measure true **competence**, not just
+                  interview performance.
+                </motion.p>
+              </motion.div>
+
+              {/* THE VISION */}
+              <motion.div
+                className="p-6 rounded-lg border-l-4 border-indigo-500 bg-gray-900/70 shadow-lg"
                 variants={itemVariants}
               >
-                To be the essential hub where every technical talent is
-                accurately assessed and every engineering team finds their next
-                great hire, all within a fair, transparent, and engaging
-                environment. We aim to move beyond traditional screening methods
-                and foster genuine connections between interviewers and
-                candidates.
-              </motion.p>
+                <motion.h4
+                  className="text-2xl font-bold mb-3 text-indigo-400"
+                  variants={itemVariants}
+                >
+                  The Vision
+                </motion.h4>
+                <motion.p
+                  className="text-gray-300 leading-relaxed"
+                  variants={itemVariants}
+                >
+                  To be the essential hub where every technical talent is
+                  accurately assessed and every engineering team finds their
+                  next great hire. We champion a **fair, transparent, and
+                  engaging** environment that fosters genuine connection.
+                </motion.p>
+              </motion.div>
             </div>
           </motion.div>
 
-          {/* --- 3. CORE VALUES GRID --- */}
-          <div className="text-center">
+          <div className="text-center pt-16">
+            {" "}
             <motion.h2
-              className="text-4xl font-extrabold mb-12"
+              className="text-4xl font-extrabold mb-12 text-indigo-300"
               variants={itemVariants}
             >
               The Pillars We Stand On
             </motion.h2>
-
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-10 mx-auto w-full">
+              {" "}
               {coreValues.map((value, index) => (
                 <motion.div
                   key={index}
-                  className="p-8 rounded-xl bg-gray-800/50 border border-indigo-700/30 hover:shadow-2xl hover:shadow-indigo-900/50 transition duration-300"
+                  className="p-8 rounded-xl bg-gray-800 shadow-2xl 
+                             border-t-4 border-b-4 border-indigo-700/50 
+                             hover:border-t-4 hover:border-b-4 hover:border-cyan-500 
+                             transition duration-500 transform hover:scale-[1.02] 
+                             flex flex-col justify-between"
                   variants={itemVariants}
                 >
-                  <value.icon className="w-10 h-10 text-pink-400 mx-auto mb-4 p-2 bg-gray-950 rounded-full shadow-lg" />
+                  <div className="mb-4">
+                    <value.icon
+                      className={`w-12 h-12 mx-auto mb-3 p-2 rounded-lg shadow-lg 
+                                          ${
+                                            value.title === "Velocity"
+                                              ? "text-pink-300 bg-indigo-900/50"
+                                              : value.title === "Integrity"
+                                              ? "text-cyan-300 bg-indigo-900/50"
+                                              : value.title === "Connection"
+                                              ? "text-yellow-300 bg-indigo-900/50"
+                                              : "text-green-300 bg-indigo-900/50"
+                                          }`}
+                    />
+                  </div>
+
                   <h3 className="text-xl font-bold mb-3 text-white">
                     {value.title}
                   </h3>
-                  <p className="text-gray-400 text-sm">{value.description}</p>
+                  <p className="text-gray-400 text-sm grow">
+                    {value.description}
+                  </p>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* --- 4. FINAL CTA (Placeholder for the actual CTA component) --- */}
           <motion.div className="text-center pt-8 pb-4" variants={itemVariants}>
             <p className="text-xl text-cyan-300 font-semibold">
               Ready to transform your hiring process?

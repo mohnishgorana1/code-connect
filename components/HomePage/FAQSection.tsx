@@ -1,10 +1,16 @@
-'use client'
+"use client";
 import { containerVariants, itemVariants } from "@/constants/homepage-data";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-export const FAQItem = ({ question, answer }: { question: any; answer: any }) => {
+export const FAQItem = ({
+  question,
+  answer,
+}: {
+  question: any;
+  answer: any;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <motion.div
@@ -53,7 +59,32 @@ export const FAQSection = () => {
       question:
         "Can I integrate CodeConnect with my Applicant Tracking System (ATS)?",
       answer:
-        "Yes, the Pro Plan includes API access for seamless integration with major ATS platforms (e.g., Greenhouse, Lever) to streamline interview scheduling and data synchronization.",
+        "No, direct API integration with external Applicant Tracking Systems (ATS) is currently not supported. You can export interview data manually for import into your ATS.",
+    },
+    {
+      question: "What programming languages are supported?",
+      answer:
+        "We support some major programming languages, including Python, JavaScript (Node.js), Java, C++. All environments come pre-configured with necessary compilers and runtime dependencies.",
+    },
+    {
+      question: "How does the code playback feature work?",
+      answer:
+        "The code playback feature captures every keystroke, clipboard paste, and code execution event. It then reconstructs the entire interview timeline, allowing reviewers to see the exact progression of the candidate's solution.",
+    },
+    {
+      question: "Do I need to install any software?",
+      answer:
+        "Absolutely not. CodeConnect is entirely browser-based. Interviewers and candidates only need a modern web browser (Chrome, Firefox, Edge) and a stable internet connection.",
+    },
+    {
+      question: "What is the cost structure?",
+      answer:
+        "We offer three main tiers: a Free Tier for basic use, a Team Plan with more features and user seats, and an Enterprise Plan tailored for larger organizations with custom needs.",
+    },
+    {
+      question: "Is there a free trial available?",
+      answer:
+        "Yes, we offer a 14-day free trial for the Team Plan, which gives you full access to all collaborative features to test our platform thoroughly before committing.",
     },
   ];
 
@@ -74,7 +105,7 @@ export const FAQSection = () => {
       </motion.h2>
 
       <motion.div
-        className="max-w-3xl mx-auto bg-gray-900 rounded-xl p-6 shadow-xl border border-gray-800"
+        className="max-w-3xl md:max-w-5xl mx-auto bg-gray-900 rounded-xl p-6 shadow-xl border border-gray-800"
         variants={itemVariants}
       >
         {faqs.map((faq, index) => (

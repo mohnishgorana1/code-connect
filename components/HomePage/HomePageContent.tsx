@@ -12,20 +12,21 @@ import { FAQSection } from "./FAQSection";
 import { PricingSection } from "./PricingSection";
 import { FinalCallToAction } from "./FinalCallToAction";
 import { CodeDemoSection } from "./CodeDemoSection";
+import { Footer } from "../Footer";
 
 function HomePageContent() {
   return (
     <motion.main
-      className="min-h-screen bg-gray-950 text-white font-inter p-4 sm:p-8 home-scrollbar"
+      className="min-h-screen bg-gray-950 text-white font-inter  home-scrollbar"
       initial="hidden"
       animate="visible"
       // This section uses 'animate' which runs on mount, so no 'once: true' issue here
       variants={containerVariants}
     >
-      <div className="max-w-6xl mx-auto py-16 md:py-24">
+      <div className="max-w-6xl mx-auto py-20 md:pt-32 ">
         <HeroSection />
-        <FeaturesSection />
         <WorkflowSection />
+        <FeaturesSection />
         <CodeDemoSection />
         <AdvancedFeaturesSection />
         <LanguageSupportSection />
@@ -35,6 +36,7 @@ function HomePageContent() {
         <PricingSection />
         <FinalCallToAction />
       </div>
+      <Footer />
     </motion.main>
   );
 }

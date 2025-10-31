@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-
+import { BsPersonVideo } from "react-icons/bs";
 const VideoCallScreen = () => (
   // Height is set to h-full to match the grid cell height
   <div className="flex flex-col h-full bg-gray-800 rounded-xl p-4 shadow-xl ">
@@ -26,14 +26,12 @@ const VideoCallScreen = () => (
       {/* Interviewer Card */}
       <div className="relative bg-gray-800 rounded-xl overflow-hidden shadow-lg aspect-video min-h-[150px]">
         {/* Simulated Video Feed */}
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-70"
-          style={{
-            backgroundImage: "url('https://picsum.photos/400/200?random=1')",
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end p-3">
-          <span className="text-sm font-semibold text-white bg-blue-600 px-2 py-0.5 rounded-md">
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex  p-3">
+          <span className="absolute top-[28%] left-[41%] md:left-[42%]">
+            <BsPersonVideo className="text-7xl md:text-5xl text-blue-500"/>
+          </span>
+
+          <span className="text-sm font-semibold text-white bg-blue-600 px-2 py-0.5 rounded-md self-end">
             Interviewer (Lead Engineer)
           </span>
         </div>
@@ -44,14 +42,11 @@ const VideoCallScreen = () => (
       {/* Candidate Card */}
       <div className="relative bg-gray-800 rounded-xl overflow-hidden shadow-lg aspect-video min-h-[150px]">
         {/* Simulated Video Feed */}
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-70"
-          style={{
-            backgroundImage: "url('https://picsum.photos/400/200?random=2')",
-          }}
-        ></div>
         <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end p-3">
-          <span className="text-sm font-semibold text-white bg-purple-600 px-2 py-0.5 rounded-md">
+          <span className="absolute top-[28%] left-[41%] md:left-[42%] ">
+            <BsPersonVideo className="text-7xl md:text-5xl text-purple-600"/>
+          </span>
+          <span className="text-sm font-semibold text-white bg-purple-600 px-2 py-0.5 rounded-md self-end">
             Candidate (You)
           </span>
         </div>

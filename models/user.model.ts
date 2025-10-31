@@ -58,4 +58,4 @@ const userSchema = new Schema<IUserDoc>(
   { timestamps: true }
 );
 
-export const User = models.User || model<IUserDoc>("User", userSchema);
+export const User = models?.User || model<IUserDoc>("User", userSchema);

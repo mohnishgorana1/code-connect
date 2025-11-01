@@ -20,6 +20,7 @@ import {
 } from "@clerk/nextjs";
 import { navLinks } from "@/constants/navlinks";
 import { useAppUser } from "@/contexts/UserContext";
+import { Role } from "@/models/user.model";
 
 export default function Header() {
   const pathname = usePathname();
@@ -68,6 +69,25 @@ export default function Header() {
               </Link>
             );
           })}
+          {appUser?.role === Role.Candidate && (
+            <Link
+              href={""}
+              className={`relative text-sm font-medium transition-all duration-300 ${
+                pathname === "/become-interviewer"
+                  ? "text-indigo-400"
+                  : "text-gray-300 hover:text-indigo-400"
+              }`}
+            >
+              Become Interviewer
+              <span
+                className={`absolute left-0 -bottom-1 h-0.5 rounded-full bg-indigo-500 transition-all duration-300 ${
+                  pathname === "/become-interviewer"
+                    ? "w-full"
+                    : "w-0 group-hover:w-full"
+                }`}
+              />
+            </Link>
+          )}
         </nav>
 
         {/* Right Section */}

@@ -80,18 +80,31 @@ export const HeroSection = () => {
           <ArrowRight className="ml-2 w-5 h-5" />
         </motion.button>
       ) : (
-        <motion.button
-          className="px-8 py-4 bg-linear-to-r from-cyan-500 to-indigo-600 text-lg font-semibold rounded-xl shadow-lg hover:shadow-cyan-500/50 transition duration-300 transform hover:scale-105 flex items-center justify-center mx-auto"
+        <motion.div
+          className="md:w-[45vw] mx-auto flex items-center justify-between gap-x-8  gap-y-6 flex-col md:flex-row"
           variants={itemVariants}
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0 0 25px rgba(0, 255, 255, 0.5)",
-          }}
           whileTap={{ scale: 0.95 }}
         >
-          <Link href={"/meeting/join"}>Join Your Live Session</Link>
-          <ArrowRight className="ml-2 w-5 h-5" />
-        </motion.button>
+          <motion.button
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 0 25px rgba(0, 255, 255, 0.5)",
+            }}
+            className="h-14 w-64 cursor-pointer bg-linear-to-l from-cyan-500 to-indigo-600 text-lg font-semibold rounded-xl shadow-lg hover:shadow-cyan-500/50 transition duration-300 transform hover:scale-105 flex items-center justify-center"
+          >
+            <Link href={"/meeting/join"}>Join Your Live Session</Link>
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </motion.button>
+          <motion.button
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 0 25px rgba(0, 255, 255, 0.5)",
+            }}
+            className="h-14 w-64 cursor-pointer bg-linear-to-r from-purple-500 to-cyan-600 text-lg font-semibold rounded-xl shadow-lg hover:shadow-cyan-500/50 transition duration-300 transform hover:scale-105 flex items-center justify-center"
+          >
+            <Link href={"/become-interviewer"}>Become An Interviewer</Link>
+          </motion.button>
+        </motion.div>
       )}
     </section>
   );

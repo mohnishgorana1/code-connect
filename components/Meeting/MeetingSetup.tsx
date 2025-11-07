@@ -127,8 +127,8 @@ function MeetingSetup({
           </DialogContent>
         </Dialog>
       </header>
-      <div className="flex flex-col justify-center items-center py-2">
-        <h1 className="text-2xl font-bold">Setup</h1>
+      <div className="flex flex-col justify-center items-center py-2 gap-y-3">
+        <h1 className="text-2xl font-bold mb-2">Setup</h1>
         <VideoPreview />
         <div className="flex h-16 items-center justify-center gap-3">
           <label
@@ -143,17 +143,17 @@ function MeetingSetup({
             />
             Join with mic and camera off
           </label>
-          <DeviceSettings />
-          <Button
-            className="rounded-md bg-green-500 px-4 py-2.5 cursor-pointer"
-            onClick={() => {
-              call.join();
-              setIsSetupComplete(true);
-            }}
-          >
-            Join meeting
-          </Button>
+          <DeviceSettings/>
         </div>
+        <Button
+          className="rounded-md bg-green-700 hover:bg-green-900 px-4 py-2.5 cursor-pointer"
+          onClick={() => {
+            call.join();
+            setIsSetupComplete(true);
+          }}
+        >
+          Complete Setup & Join meeting
+        </Button>
       </div>
     </div>
   );

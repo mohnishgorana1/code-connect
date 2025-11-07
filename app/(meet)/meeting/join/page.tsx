@@ -19,9 +19,9 @@ export default function JoinPage() {
     const autoJoin = async () => {
       if (!meetingIdFromUrl || !appUser?._id) return;
       setIsJoining(true);
-      
+
       try {
-        const url = `/api/meeting/join?candidateId=${appUser._id}`;
+        const url = `/api/meeting/join?userId=${appUser._id}`;
         const res = await axios.post(url, { meetingId: meetingIdFromUrl });
 
         if (res.data.success) {

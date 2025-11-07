@@ -27,19 +27,23 @@ export default function Header() {
   const { user, isSignedIn } = useUser();
   const [open, setOpen] = useState(false);
   const { appUser } = useAppUser();
-
+  const currentUserDashboardUrl =
+    appUser && appUser?.role === Role.Candidate
+      ? "/dashboard/candidate"
+      : appUser?.role === Role.Interviewer
+      ? "/dashboard/interviewer"
+      : "/dashboard/adimn";
   return (
     <header className="w-full sticky top-0 z-50 bg-gray-950">
       <div className="max-w-7xl md:max-w-[99%] mx-auto flex items-center justify-between px-4 py-5">
         {/* Logo */}
-
         <Link
           href="/"
           className="text-xl md:text-2xl font-semibold tracking-tight flex items-center group transition-all duration-300"
         >
           <Plug
             size={26}
-            className="text-indigo-400 group-hover:rotate-12 transition-transform duration-300"
+            className="text-cyan-400 group-hover:rotate-12 transition-transform duration-300"
           />
           <span className="bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-indigo-500 font-bold tracking-tight">
             CodeConnect
@@ -56,32 +60,32 @@ export default function Header() {
                 href={link.href}
                 className={`relative text-sm font-medium transition-all duration-300 ${
                   isActive
-                    ? "text-indigo-400"
-                    : "text-gray-300 hover:text-indigo-400"
+                    ? "text-cyan-400"
+                    : "text-gray-300 hover:text-cyan-400"
                 }`}
               >
                 {link.name}
                 <span
-                  className={`absolute left-0 -bottom-1 h-[2px] rounded-full bg-indigo-500 transition-all duration-300 ${
+                  className={`absolute left-0 -bottom-1 h-0.5 rounded-full bg-cyan-500 transition-all duration-300 ${
                     isActive ? "w-full" : "w-0 group-hover:w-full"
                   }`}
                 />
               </Link>
             );
           })}
-          {appUser?.role === Role.Candidate && (
+          {appUser && appUser?.role && (
             <Link
-              href={""}
+              href={currentUserDashboardUrl}
               className={`relative text-sm font-medium transition-all duration-300 ${
-                pathname === "/become-interviewer"
-                  ? "text-indigo-400"
-                  : "text-gray-300 hover:text-indigo-400"
+                pathname === "/dashboard"
+                  ? "text-cyan-400"
+                  : "text-gray-300 hover:text-cyan-400"
               }`}
             >
-              Become Interviewer
+              Dashboard
               <span
                 className={`absolute left-0 -bottom-1 h-0.5 rounded-full bg-indigo-500 transition-all duration-300 ${
-                  pathname === "/become-interviewer"
+                  pathname === "/dashboard"
                     ? "w-full"
                     : "w-0 group-hover:w-full"
                 }`}
@@ -98,7 +102,7 @@ export default function Header() {
               <SignOutButton>
                 <Button
                   variant="outline"
-                  className="border-neutral-700 text-gray-200 hover:text-indigo-400 transition-all duration-300"
+                  className="border-neutral-700 text-gray-200 hover:text-cyan-400 transition-all duration-300"
                 >
                   Sign Out
                 </Button>
@@ -120,7 +124,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-gray-300 hover:text-indigo-400 transition-all duration-300"
+                className="text-gray-300 hover:text-cyan-400 transition-all duration-300"
               >
                 <Menu className="w-6 h-6" />
               </Button>
@@ -135,7 +139,7 @@ export default function Header() {
                   <Link
                     href="/"
                     onClick={() => setOpen(false)}
-                    className="text-2xl font-semibold text-indigo-400 flex items-center gap-2"
+                    className="text-2xl font-semibold text-cyan-400 flex items-center gap-2"
                   >
                     <GraduationCap size={24} />
                     Code Connect
@@ -151,8 +155,8 @@ export default function Header() {
                     onClick={() => setOpen(false)}
                     className={`text-lg font-medium transition-all duration-300 ${
                       pathname === link.href
-                        ? "text-indigo-400"
-                        : "text-gray-300 hover:text-indigo-400"
+                        ? "text-cyan-400"
+                        : "text-gray-300 hover:text-cyan-400"
                     }`}
                   >
                     {link.name}
@@ -166,7 +170,7 @@ export default function Header() {
                       <SignOutButton>
                         <Button
                           variant="outline"
-                          className="border-neutral-700 text-gray-200 hover:text-indigo-400 transition-all duration-300"
+                          className="border-neutral-700 text-gray-200 hover:text-cyan-400 transition-all duration-300"
                         >
                           Sign Out
                         </Button>

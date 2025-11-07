@@ -1,7 +1,7 @@
 // POST : /api/meeting/create
 
 import { Meeting, IMeeting, MeetingStatus } from "@/models/meeting.model";
-import { User, Role } from "@/models/user.model"; // Assuming User model is defined elsewhere
+import { User, Role } from "@/models/user.model";
 import { NextResponse } from "next/server";
 import { createMeetingSchema } from "@/validations/meeting.schema";
 import { z } from "zod";
@@ -109,6 +109,8 @@ export async function POST(req: Request) {
       description: description,
       interviewer: interviewer._id,
       candidate: candidate._id,
+      isInterviewerOnline: false,
+      isCandidateOnline: false,
       status: MeetingStatus.Scheduled,
       startTime: startTimeDate,
     };
@@ -118,7 +120,7 @@ export async function POST(req: Request) {
 
     // --- 5. Success Response ---
     console.log("meeting scheduled", newMeeting);
-    
+
     return NextResponse.json(
       {
         success: true,

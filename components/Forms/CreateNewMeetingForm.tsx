@@ -8,10 +8,17 @@ import {
 import { z } from "zod";
 import axios from "axios";
 import { Button } from "../ui/button";
-import { Loader2 } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowRightCircle,
+  ArrowRightFromLine,
+  Loader2,
+} from "lucide-react";
 import { Label } from "../ui/label";
 import { useAppUser } from "@/contexts/UserContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
+import Link from "next/link";
 
 const ErrorMessage = ({ message }: { message: string | undefined }) =>
   message ? <p className="text-red-400 text-sm mt-1">{message}</p> : null;
@@ -21,7 +28,7 @@ const ShadcnInput = React.forwardRef<
   React.ComponentPropsWithoutRef<"input"> & { isTextarea?: boolean }
 >(({ className, isTextarea, ...props }, ref) => {
   const baseClasses =
-    "mt-1 flex w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors";
+    "mt-1 flex w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors";
 
   if (isTextarea) {
     return (
@@ -44,8 +51,10 @@ const ShadcnInput = React.forwardRef<
 ShadcnInput.displayName = "ShadcnInput";
 
 function CreateNewMeetingForm() {
+  const pathname = usePathname();
   const { appUser } = useAppUser();
   const router = useRouter();
+  const [copyMessage, setCopyMessage] = useState("");
 
   const initialTime = new Date(Date.now() + 5 * 60000)
     .toISOString()
@@ -63,7 +72,7 @@ function CreateNewMeetingForm() {
   >({});
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [createdMeeting, setCreatedMeeting] = useState<any>(null);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -71,10 +80,23 @@ function CreateNewMeetingForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleCopyLink = (link: any) => {
+    // Note: Using document.execCommand('copy') for better compatibility in iFrames
+    const el = document.createElement("textarea");
+    el.value = link;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    setCopyMessage("✅ Link copied!");
+    toast.success("Meeting Link Copied");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
     setErrors({});
+    setCreatedMeeting(null);
     setIsSubmitting(true);
 
     try {
@@ -82,9 +104,7 @@ function CreateNewMeetingForm() {
       const url = `/api/meeting/create?interviewerId=${appUser?._id}`;
       const response = await axios.post(url, formData);
       if (response.data.success) {
-        setMessage(
-          `✅ Success! Meeting scheduled. Room ID: ${response.data.data.meeting._id}`
-        );
+        setMessage(`✅ Success! Meeting scheduled`);
         setFormData({
           title: "",
           description: "",
@@ -94,7 +114,7 @@ function CreateNewMeetingForm() {
             .substring(0, 16),
         });
         const { meeting } = response.data.data;
-        // setTimeout(() => router.push(`/meeting/${meeting?._id}`), 1200);
+        setCreatedMeeting(meeting);
       } else {
         setMessage(
           `❌ Error: ${response.data.message || "Failed to create meeting"}`
@@ -133,8 +153,19 @@ function CreateNewMeetingForm() {
     }
   };
 
+  // Calculate meeting link if available
+  const meetingLink = createdMeeting
+    ? `${window.location.origin}/meeting/${createdMeeting._id}`
+    : null;
+
   return (
-    <main className="p-8 max-w-lg mx-auto bg-gray-900 text-gray-50 shadow-2xl rounded-xl border border-gray-700">
+    <main
+      className={`p-8 ${
+        pathname === "/dashboard/interviewer/create-meeting"
+          ? "w-full h-full"
+          : "max-w-lg"
+      } mx-auto bg-gray-900 text-gray-50 shadow-2xl rounded-xl border border-gray-700`}
+    >
       <h1 className="text-3xl font-extrabold text-cyan-400 mb-6 border-b border-gray-700 pb-2">
         Schedule New Interview
       </h1>
@@ -148,6 +179,39 @@ function CreateNewMeetingForm() {
           }`}
         >
           {message}
+        </div>
+      )}
+
+      {createdMeeting && meetingLink && (
+        <div className=" space-y-3 my-4 pb-4 w-full flex flex-col bg-gray-800/40 px-2 rounded-md transition-all duration-500 ease-out">
+          <div className="mt-4 p-3 bg-gray-800/70 rounded-lg">
+            <p className="text-sm font-semibold mb-2 text-gray-200">
+              Shareable Meeting Link:
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+              <input
+                type="text"
+                readOnly
+                value={meetingLink}
+                className="grow p-2 text-sm text-cyan-400 bg-gray-900 border border-gray-600 rounded-md truncate"
+              />
+              <Button
+                type="button"
+                onClick={() => handleCopyLink(meetingLink)}
+                className={`shrink-0 ${
+                  copyMessage ? "bg-green-600" : "bg-cyan-600"
+                } text-white hover:bg-cyan-700 active:bg-cyan-800 transition duration-150 shadow shadow-cyan-500/50`}
+              >
+                {copyMessage ? "Copied!" : "Copy Link"}
+              </Button>
+            </div>
+          </div>
+          <Link
+            href={meetingLink}
+            className="self-start flex gap-x-2 border border-cyan-500 rounded-xl text-cyan-500 px-4 py-1.5 items-center justify-center hover:text-cyan-600 duration-300 ease-in-out font-medium "
+          >
+            Go to Meeting Page <ArrowRightCircle />
+          </Link>
         </div>
       )}
 

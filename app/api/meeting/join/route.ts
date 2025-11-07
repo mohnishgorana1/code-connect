@@ -11,11 +11,11 @@ export async function POST(req: Request) {
     await connectDB();
 
     const url = new URL(req.url);
-    const candidateId = url.searchParams.get("candidateId");
+    const userId = url.searchParams.get("userId");
 
-    if (!candidateId || !mongoose.Types.ObjectId.isValid(candidateId)) {
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json(
-        { success: false, message: "Invalid or missing candidateId." },
+        { success: false, message: "Invalid or missing userId." },
         { status: 400 }
       );
     }
@@ -27,6 +27,16 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "Missing User Details" },
+        { status: 400 }
+      );
+    }
+    const role = user?.role;
 
     // Find meeting
     const meeting = await Meeting.findById(meetingId)
@@ -40,15 +50,30 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validate candidate
-    if (meeting.candidate._id.toString() !== candidateId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "You are not authorized to join this meeting.",
-        },
-        { status: 403 }
-      );
+    if (role === Role.Candidate) {
+      // Validate candidate
+      if (meeting.candidate._id.toString() !== userId) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "You are not authorized to join this meeting.",
+          },
+          { status: 403 }
+        );
+      }
+      meeting.isCandidateOnline = true;
+    }else{
+      // Validate interviewer
+      if (meeting.interviewer._id.toString() !== userId) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "You are not authorized to join this meeting.",
+          },
+          { status: 403 }
+        );
+      }
+      meeting.isInterviewerOnline = true;
     }
 
     // Validate meeting status

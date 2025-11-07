@@ -9,7 +9,7 @@ import {
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppUser } from "@/contexts/UserContext";
 
 function JoinMeetingForm() {
@@ -20,6 +20,7 @@ function JoinMeetingForm() {
   });
   const [error, setError] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const pathname = usePathname();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,10 +51,16 @@ function JoinMeetingForm() {
   };
 
   return (
-    <main className="p-8 max-w-lg mx-auto bg-gray-900 text-gray-50 shadow-2xl rounded-xl border border-gray-700">
-      <h1 className="text-3xl font-extrabold text-cyan-400 mb-6 border-b border-gray-700 pb-2">
-        Join Scheduled Interview
-      </h1>
+    <main
+      className={`p-8 ${
+        pathname === "/dashboard/candidate/join-meeting" ? "w-full h-full" : "max-w-lg"
+      } mx-auto bg-gray-900 text-gray-50 shadow-2xl rounded-xl border border-gray-700`}
+    >
+      {pathname !== "/dashboard/candidate/join-meeting" && (
+        <h1 className="text-3xl font-extrabold text-cyan-400 mb-6 border-b border-gray-700 pb-2">
+          Join Scheduled Interview
+        </h1>
+      )}
 
       {error && (
         <p className="mb-4 text-sm text-red-400 bg-red-900/50 border border-red-700 p-3 rounded-lg">
@@ -88,6 +95,11 @@ function JoinMeetingForm() {
           {isSubmitting ? <Loader2 className="animate-spin" /> : "Join Meeting"}
         </Button>
       </form>
+
+      <p className="mt-4 text-sm text-gray-500">
+        For technical support, please contact:{" "}
+        <span className="text-cyan-400">mohnishgorana1@gmail.com</span>
+      </p>
     </main>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
@@ -17,17 +17,18 @@ import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import LiveblocksMeetingProvider from "@/contexts/LiveblocksProvider";
+import { useAppUser } from "@/contexts/UserContext";
+import { Role } from "@/models/user.model";
+import Link from "next/link";
 
-export default function LiveMeetingRoomPage() {
-  const { meetingId } = useParams();
-  const [meetingLink, setMeetingLink] = useState("");
-  const [meetingData, setMeetingData] = useState<any>();
+const LiveMeetingRoomPageHeader = ({
+  meetingData,
+  meetingLink,
+}: {
+  meetingData?: any;
+  meetingLink: string;
+}) => {
   const [copied, setCopied] = useState(false);
-  const { user, isLoaded } = useUser();
-  const client = useStreamVideoClient();
-  const [callDetails, setCallDetails] = useState<Call>();
-  const [isCreatingStreamMeeting, setIsCreatingStreamMeeting] = useState(false);
-  const [isStreamMeetingCreated, setIsStreamMeetingCreated] = useState(false);
 
   const handleCopy = async () => {
     if (!meetingLink) return;
@@ -39,6 +40,96 @@ export default function LiveMeetingRoomPage() {
       console.error(err);
     }
   };
+  return (
+    <header className="w-full flex items-center justify-between px-6 py-3 border-b border-neutral-800">
+      <h1 className="text-xl font-semibold text-indigo-400">
+        {meetingData ? meetingData?.title : "Loading..."}
+      </h1>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            className="border-indigo-500 text-indigo-400 hover:bg-indigo-500/10 flex items-center gap-2"
+          >
+            <MoreHorizontal className="h-4 w-4" /> More
+          </Button>
+        </DialogTrigger>
+
+        <DialogContent className="bg-gray-900 border border-neutral-700 text-gray-100">
+          <DialogHeader>
+            <DialogTitle className="text-indigo-400">
+              Meeting Details
+            </DialogTitle>
+          </DialogHeader>
+
+          {meetingData ? (
+            <div className="mt-2 space-y-3">
+              <p>
+                <span className="text-gray-400">Meeting ID:</span>{" "}
+                <span className="font-mono text-cyan-400">
+                  {meetingData?._id}
+                </span>
+              </p>
+              <p>
+                <span className="text-gray-400">Status:</span>{" "}
+                <span className="text-green-400">{meetingData.status}</span>
+              </p>
+
+              <div>
+                <p className="text-gray-400">Interviewer:</p>
+                <p className="text-sm text-indigo-300">
+                  {meetingData.interviewer?.name} (
+                  {meetingData.interviewer?.email})
+                </p>
+              </div>
+
+              <div>
+                <p className="text-gray-400">Candidate:</p>
+                <p className="text-sm text-indigo-300">
+                  {meetingData.candidate?.name} ({meetingData.candidate?.email})
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <p className="text-gray-400">Meeting Link:</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-cyan-400 font-mono text-sm break-all">
+                    {meetingLink || "Loading..."}
+                  </span>
+                  <Button
+                    onClick={handleCopy}
+                    variant="outline"
+                    className="border-indigo-500 text-indigo-400 hover:bg-indigo-500/10"
+                  >
+                    {copied ? "Copied!" : "Copy"}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p className="text-gray-500 text-sm">Loading meeting info...</p>
+          )}
+        </DialogContent>
+      </Dialog>
+    </header>
+  );
+};
+
+export default function LiveMeetingRoomPage() {
+  const router = useRouter();
+  const { meetingId } = useParams();
+  const [meetingLink, setMeetingLink] = useState("");
+  const [meetingData, setMeetingData] = useState<any>();
+  const { user, isLoaded } = useUser();
+  const client = useStreamVideoClient();
+  const [callDetails, setCallDetails] = useState<Call>();
+  const [isCreatingStreamMeeting, setIsCreatingStreamMeeting] = useState(false);
+  const [isStreamMeetingCreated, setIsStreamMeetingCreated] = useState(false);
+
+  const [isUserJoinedMeeting, setIsUserJoinedMeeting] = useState(true);
+
+  const { appUser } = useAppUser();
 
   const createStreamMeeting = async () => {
     if (!client || !user) return;
@@ -102,6 +193,20 @@ export default function LiveMeetingRoomPage() {
           console.log("meeting data", res.data.data.meeting);
 
           setMeetingData(res.data.data.meeting);
+          // validation : if not joined then return to join page
+          if (appUser?.role === Role.Candidate) {
+            if (!res.data.data.meeting.isCandidateOnline) {
+              console.log("not joined");
+              setIsUserJoinedMeeting(false);
+              return;
+            }
+          } else {
+            if (!res.data.data.meeting.isInterviewerOnline) {
+              setIsUserJoinedMeeting(false);
+              return;
+            }
+          }
+
           // now create meeting for stream
           createStreamMeeting();
         } else {
@@ -112,83 +217,39 @@ export default function LiveMeetingRoomPage() {
       }
     };
 
-    if (meetingId && isLoaded) fetchMeeting();
-  }, [meetingId]);
+    if (meetingId && isLoaded && appUser) fetchMeeting();
+  }, [meetingId, isLoaded, appUser, client, user]);
+  
+
+  if (!isUserJoinedMeeting) {
+    return (
+      <main className="min-h-screen flex flex-col bg-gray-950">
+        <LiveMeetingRoomPageHeader meetingLink={meetingLink} />
+        <section className="flex flex-col items-center justify-center gap-y-2 mt-[10vh]">
+          <p className="text-base md:text-2xl font-bold tracking-wide">
+            Oops! Looks Like You haven&apos;t joined meeting yet
+          </p>
+          <h1 className="font-semibold text-3xl md:text-4xl lg:text-6xl mb-5 tracking-tight">
+            Join Meeting First
+          </h1>
+          <Link
+            href={`/meeting/join?meetingId=${meetingId}`}
+            className="py-1.5 px-4 rounded-3xl min-w-56 max-w-[80vw] text-center bg-gray-900 border hover:border-gray-200 duration-300 ease-in-out"
+          >
+            Click To Join
+          </Link>
+        </section>
+      </main>
+    );
+  }
 
   if (!isStreamMeetingCreated) {
     return (
       <main className="min-h-screen flex flex-col bg-gray-950">
-        <header className="w-full flex items-center justify-between px-6 py-3 border-b border-neutral-800">
-          <h1 className="text-xl font-semibold text-indigo-400">
-            {meetingData ? meetingData?.title : "Loading..."}
-          </h1>
-
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="border-indigo-500 text-indigo-400 hover:bg-indigo-500/10 flex items-center gap-2"
-              >
-                <MoreHorizontal className="h-4 w-4" /> More
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="bg-gray-900 border border-neutral-700 text-gray-100">
-              <DialogHeader>
-                <DialogTitle className="text-indigo-400">
-                  Meeting Details
-                </DialogTitle>
-              </DialogHeader>
-
-              {meetingData ? (
-                <div className="mt-2 space-y-3">
-                  <p>
-                    <span className="text-gray-400">Meeting ID:</span>{" "}
-                    <span className="font-mono text-cyan-400">{meetingId}</span>
-                  </p>
-                  <p>
-                    <span className="text-gray-400">Status:</span>{" "}
-                    <span className="text-green-400">{meetingData.status}</span>
-                  </p>
-
-                  <div>
-                    <p className="text-gray-400">Interviewer:</p>
-                    <p className="text-sm text-indigo-300">
-                      {meetingData.interviewer?.name} (
-                      {meetingData.interviewer?.email})
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-gray-400">Candidate:</p>
-                    <p className="text-sm text-indigo-300">
-                      {meetingData.candidate?.name} (
-                      {meetingData.candidate?.email})
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <p className="text-gray-400">Meeting Link:</p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400 font-mono text-sm break-all">
-                        {meetingLink || "Loading..."}
-                      </span>
-                      <Button
-                        onClick={handleCopy}
-                        variant="outline"
-                        className="border-indigo-500 text-indigo-400 hover:bg-indigo-500/10"
-                      >
-                        {copied ? "Copied!" : "Copy"}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-gray-500 text-sm">Loading meeting info...</p>
-              )}
-            </DialogContent>
-          </Dialog>
-        </header>
+        <LiveMeetingRoomPageHeader
+          meetingData={meetingData}
+          meetingLink={meetingLink}
+        />
         <section className="flex-1 flex items-center justify-center animate-pulse">
           Setting Up Meeting...
         </section>

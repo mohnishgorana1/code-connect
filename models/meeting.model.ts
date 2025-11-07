@@ -10,8 +10,10 @@ export enum MeetingStatus {
 export interface IMeeting {
   title: string;
   description?: string;
-  interviewer: mongoose.Types.ObjectId; 
-  candidate: mongoose.Types.ObjectId;  
+  interviewer: mongoose.Types.ObjectId;
+  candidate: mongoose.Types.ObjectId;
+  isInterviewerOnline: boolean;
+  isCandidateOnline: boolean;
   status: MeetingStatus;
   startTime?: Date;
   endTime?: Date;
@@ -32,6 +34,7 @@ const meetingSchema = new Schema<IMeetingDoc>(
       type: String,
       trim: true,
     },
+
     interviewer: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -40,6 +43,16 @@ const meetingSchema = new Schema<IMeetingDoc>(
     candidate: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    isInterviewerOnline: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+    isCandidateOnline: {
+      type: Boolean,
+      default: false,
       required: true,
     },
     status: {
@@ -57,4 +70,5 @@ const meetingSchema = new Schema<IMeetingDoc>(
   { timestamps: true }
 );
 
-export const Meeting = models.Meeting || model<IMeetingDoc>("Meeting", meetingSchema);
+export const Meeting =
+  models.Meeting || model<IMeetingDoc>("Meeting", meetingSchema);

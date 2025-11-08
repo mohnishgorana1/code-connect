@@ -45,7 +45,7 @@ function MeetingStream({
             meetingLink = {meetingLink}
           />
         ) : (
-          <MeetingRoom />
+          <MeetingRoom meetingId={meetingId}/>
         )}
       </StreamTheme>
     </StreamCall>

@@ -8,7 +8,7 @@ import {
   SpeakerLayout,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PanelLeftClose, PanelLeftOpen, Play, Users } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import EndCallButton from "./EndCallButton";
@@ -25,19 +25,24 @@ import {
 import { Loader2 } from "lucide-react";
 import { inputNotes, languageMap } from "@/constants/code-editor-data";
 import { executeCode } from "@/lib/judge0";
+import { useAppUser } from "@/contexts/UserContext";
+import { Role } from "@/models/user.model";
 
-function MeetingRoom() {
+function MeetingRoom({ meetingId }: { meetingId: string }) {
+  const { appUser } = useAppUser();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const isPersonalRoom = !!searchParams.get("personal");
-  const [showParticipants, setShowParticipants] = useState(false);
+  // stream state and hooks
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
-  const [showVideoPane, setShowVideoPane] = useState(true);
-  const [language, setLanguage] = useState("typescript");
 
+  // video states
+  const [showParticipants, setShowParticipants] = useState(false);
+  const [showVideoPane, setShowVideoPane] = useState(true);
+
+  // code editor states
   const editorRef = useRef<any>(null);
+  const [language, setLanguage] = useState("typescript");
   const [output, setOutput] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [isCodeExecuting, setIsCodeExecuting] = useState(false);
@@ -71,6 +76,15 @@ function MeetingRoom() {
       setIsCodeExecuting(false);
     }
   };
+
+  useEffect(() => {
+    if (callingState === CallingState.LEFT) {
+      console.log("Call disconnected, redirecting to home.");
+      if (window.location.pathname !== "/") {
+        router.push("/");
+      }
+    }
+  }, [callingState, router]);
 
   if (callingState !== CallingState.JOINED) return <Loader />;
 
@@ -113,7 +127,9 @@ function MeetingRoom() {
                 >
                   <PanelLeftClose size={20} />
                 </Button>
-                {!isPersonalRoom && <EndCallButton />}
+                {appUser?.role === Role.Interviewer && (
+                  <EndCallButton meetingId={meetingId} />
+                )}
               </div>
             </div>
           </div>

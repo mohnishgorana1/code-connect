@@ -36,7 +36,6 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    const role = user?.role;
 
     // Find meeting
     const meeting = await Meeting.findById(meetingId)
@@ -50,8 +49,9 @@ export async function POST(req: Request) {
       );
     }
 
-    if (role === Role.Candidate) {
+    if (user?.role === Role.Candidate) {
       // Validate candidate
+      console.log("join for user role", user?.role);
       if (meeting.candidate._id.toString() !== userId) {
         return NextResponse.json(
           {
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
         );
       }
       meeting.isCandidateOnline = true;
-    }else{
+    } else {
       // Validate interviewer
       if (meeting.interviewer._id.toString() !== userId) {
         return NextResponse.json(
@@ -87,11 +87,25 @@ export async function POST(req: Request) {
       );
     }
 
-    // If scheduled, mark as ongoing
-    if (meeting.status === MeetingStatus.Scheduled) {
-      meeting.status = MeetingStatus.Ongoing;
-      await meeting.save();
+    // 🚫 Prevent joining before startTime
+    if (meeting.startTime && new Date() < new Date(meeting.startTime)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Meeting has not started yet. Scheduled for ${new Date(
+            meeting.startTime
+          ).toLocaleString()}.`,
+        },
+        { status: 400 }
+      );
     }
+
+    if (meeting.isInterviewerOnline && meeting.isCandidateOnline) {
+      if (meeting.status === MeetingStatus.Scheduled) {
+        meeting.status = MeetingStatus.Ongoing;
+      }
+    }
+    await meeting.save();
 
     return NextResponse.json(
       {

@@ -62,7 +62,7 @@ export async function GET(
     );
 
 
-    console.log("all meeting", upcomingMeetings, previousMeetings)
+    console.log("upcomings", upcomingMeetings)
 
 
     return NextResponse.json(

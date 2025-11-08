@@ -41,7 +41,7 @@ const LiveMeetingRoomPageHeader = ({
     }
   };
   return (
-    <header className="w-full flex items-center justify-between px-6 py-3 border-b border-neutral-800">
+    <header className="w-full flex items-center justify-between px-6 py-3 border-b border-gray-900/50">
       <h1 className="text-xl font-semibold text-indigo-400">
         {meetingData ? meetingData?.title : "Loading..."}
       </h1>
@@ -219,12 +219,14 @@ export default function LiveMeetingRoomPage() {
 
     if (meetingId && isLoaded && appUser) fetchMeeting();
   }, [meetingId, isLoaded, appUser, client, user]);
-  
 
   if (!isUserJoinedMeeting) {
     return (
       <main className="min-h-screen flex flex-col bg-gray-950">
-        <LiveMeetingRoomPageHeader meetingLink={meetingLink} />
+        <LiveMeetingRoomPageHeader
+          meetingLink={meetingLink}
+          meetingData={meetingData}
+        />
         <section className="flex flex-col items-center justify-center gap-y-2 mt-[10vh]">
           <p className="text-base md:text-2xl font-bold tracking-wide">
             Oops! Looks Like You haven&apos;t joined meeting yet

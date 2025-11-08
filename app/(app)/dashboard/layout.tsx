@@ -19,7 +19,7 @@ const CandidateTabs = [
   {
     name: "Join Meeting",
     icon: ExternalLink,
-    href: "/dashboard/candidate/join-meeting",
+    href: "/dashboard/join-meeting",
   },
   {
     name: "Previous Meeting",
@@ -37,6 +37,11 @@ const InterviewerTabs = [
     name: "Create Meeting",
     href: "/dashboard/interviewer/create-meeting",
     icon: CirclePlus,
+  },
+  {
+    name: "Join Meeting",
+    icon: ExternalLink,
+    href: "/dashboard/join-meeting",
   },
   {
     name: "Previous Meeting",
@@ -85,7 +90,9 @@ export default function DashboardLayout({
   }
 
   return (
-    <main className={`min-h-[89vh] bg-gray-950 flex flex-col px-2 md:px-3 gap-y-2`}>
+    <main
+      className={`min-h-[89vh] bg-gray-950 flex flex-col px-2 md:px-3 gap-y-2`}
+    >
       <div className="w-full flex min-h-full">
         <aside
           className={`${

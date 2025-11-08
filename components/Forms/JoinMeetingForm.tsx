@@ -53,10 +53,10 @@ function JoinMeetingForm() {
   return (
     <main
       className={`p-8 ${
-        pathname === "/dashboard/candidate/join-meeting" ? "w-full h-full" : "max-w-lg"
+        pathname === "/dashboard/join-meeting" ? "w-full h-full" : "max-w-lg"
       } mx-auto bg-gray-900 text-gray-50 shadow-2xl rounded-xl border border-gray-700`}
     >
-      {pathname !== "/dashboard/candidate/join-meeting" && (
+      {pathname !== "/dashboard/join-meeting" && (
         <h1 className="text-3xl font-extrabold text-cyan-400 mb-6 border-b border-gray-700 pb-2">
           Join Scheduled Interview
         </h1>

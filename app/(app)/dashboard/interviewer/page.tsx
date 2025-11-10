@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 export default function InterviewerDashboardPage() {
   const { appUser, loading } = useAppUser();
@@ -264,16 +265,16 @@ function InterviewCard({
       </div>
 
       <div className="flex gap-3">
-        <button
-          onClick={() => router.push(`/meeting/${meetingId}`)}
+        <Link
+          href={`/meeting/join?meetingId=${meetingId}`}
           className="bg-purple-700 hover:bg-purple-800 text-white text-sm px-4 py-1.5 rounded-md transition"
         >
           Join
-        </button>
+        </Link>
 
         <Button
           variant="outline"
-          className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-gray-500 text-sm"
+          className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-transparent hover:ring-2 hover:ring-gray-200 duration-300 ease-out text-sm"
           onClick={() => setOpen(true)}
         >
           Update

@@ -21,9 +21,12 @@ export default function JoinPage() {
       setIsJoining(true);
 
       try {
-        console.log("auto join", appUser?._id, meetingIdFromUrl)
-        const url = `/api/meeting/join?userId=${appUser._id}`;
-        const res = await axios.post(url, { meetingId: meetingIdFromUrl });
+        console.log("auto join", appUser?._id, meetingIdFromUrl);
+        const url = `/api/meeting/join`;
+        const res = await axios.post(url, {
+          meetingId: meetingIdFromUrl,
+          userId: appUser?._id,
+        });
 
         if (res.data.success) {
           router.push(`/meeting/${meetingIdFromUrl}`);
@@ -36,7 +39,6 @@ export default function JoinPage() {
         setIsJoining(false);
       }
     };
-
     autoJoin();
   }, [meetingIdFromUrl, appUser, router]);
 
@@ -51,7 +53,7 @@ export default function JoinPage() {
 
   if (error) {
     return (
-      <main className="flex flex-col items-center justify-center h-[80vh] bg-neutral-950 text-gray-100">
+      <main className="flex flex-col items-center justify-center min-h-[90vh] bg-gray-950 text-gray-100">
         <p className="text-red-400 font-medium mb-4">{error}</p>
         <JoinMeetingForm />
       </main>

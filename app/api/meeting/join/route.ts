@@ -10,9 +10,7 @@ export async function POST(req: Request) {
   try {
     await connectDB();
 
-    const url = new URL(req.url);
-    const userId = url.searchParams.get("userId");
-
+    const { meetingId, userId } = await req.json();
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json(
         { success: false, message: "Invalid or missing userId." },
@@ -20,7 +18,6 @@ export async function POST(req: Request) {
       );
     }
 
-    const { meetingId } = await req.json();
     if (!meetingId || !mongoose.Types.ObjectId.isValid(meetingId)) {
       return NextResponse.json(
         { success: false, message: "Invalid or missing meetingId." },

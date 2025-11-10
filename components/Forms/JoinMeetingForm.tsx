@@ -29,8 +29,9 @@ function JoinMeetingForm() {
 
     try {
       joinMeetingSchema.parse(formData);
-      const url = `/api/meeting/join?candidateId=${appUser?._id}`;
-      const res = await axios.post(url, formData);
+      const url = `/api/meeting/join`;
+      const dataToSend = { ...formData, userId: appUser?._id };
+      const res = await axios.post(url, dataToSend);
 
       if (res.data.success) {
         router.push(`/meeting/${formData.meetingId}`);

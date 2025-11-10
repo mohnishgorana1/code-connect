@@ -55,8 +55,10 @@ export async function POST(req: Request) {
     }
 
     const { title, description, candidateEmail, startTime } =
-      validatedClientData;
-    const startTimeDate = new Date(startTime);
+      validatedClientData; 
+    // const startTimeDate = new Date(startTime);  // to convert into UTC
+    console.log("req: startTime", startTime);
+    // console.log("db: startTimeDate", startTimeDate);
 
     // A. Interviewer Validation
     const interviewer = await User.findById(interviewerId);
@@ -112,7 +114,7 @@ export async function POST(req: Request) {
       isInterviewerOnline: false,
       isCandidateOnline: false,
       status: MeetingStatus.Scheduled,
-      startTime: startTimeDate,
+      startTime: startTime,
     };
 
     const newMeeting = new Meeting(newMeetingData);

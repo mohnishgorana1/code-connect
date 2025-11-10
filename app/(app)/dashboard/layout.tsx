@@ -129,7 +129,7 @@ export default function DashboardLayout({
                 const Icon = tab.icon;
                 const isActive = tab.href === pathname;
                 const activeClasses =
-                  "bg-cyan-600 border-cyan-500 shadow-lg shadow-cyan-500/30 text-white font-semibold";
+                  `${appUser?.role === Role.Candidate ? "bg-cyan-600 border-cyan-500 shadow-cyan-500/30 text-white" : "text-purple-400 border-purple-500 shadow-purple-500/30"}  shadow-lg  font-semibold`
                 const inactiveClasses =
                   "border-gray-700 bg-gray-800 hover:bg-gray-700 hover:shadow-gray-600/50 text-gray-300";
                 const baseClasses = "ease-out duration-300 shadow-md";

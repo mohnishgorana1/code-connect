@@ -129,6 +129,7 @@ export default function LiveMeetingRoomPage() {
 
   const [isUserJoinedMeeting, setIsUserJoinedMeeting] = useState(true);
 
+
   const { appUser } = useAppUser();
 
   const createStreamMeeting = async () => {
@@ -191,6 +192,7 @@ export default function LiveMeetingRoomPage() {
 
         if (res.data.success) {
           console.log("meeting data", res.data.data.meeting);
+          
 
           setMeetingData(res.data.data.meeting);
           // validation : if not joined then return to join page
@@ -227,16 +229,17 @@ export default function LiveMeetingRoomPage() {
           meetingLink={meetingLink}
           meetingData={meetingData}
         />
-        <section className="flex flex-col items-center justify-center gap-y-2 mt-[10vh]">
-          <p className="text-base md:text-2xl font-bold tracking-wide">
-            Oops! Looks Like You haven&apos;t joined meeting yet
-          </p>
-          <h1 className="font-semibold text-3xl md:text-4xl lg:text-6xl mb-5 tracking-tight">
-            Join Meeting First
+        <section className="flex flex-col items-center justify-center gap-y-3 mt-[10vh]">
+          <h1 className="font-semibold text-3xl md:text-4xl lg:text-7xl tracking-tight my-1 text-center">
+            Oops!
           </h1>
+          <p className="text-xl my-5 flex flex-col items-center gap-y-4">
+            <span>Looks Like You haven&apos;t joined meeting yet</span>
+            <span>Join Meeting First</span>
+          </p>
           <Link
             href={`/meeting/join?meetingId=${meetingId}`}
-            className="py-1.5 px-4 rounded-3xl min-w-56 max-w-[80vw] text-center bg-gray-900 border hover:border-gray-200 duration-300 ease-in-out"
+            className="py-1.5 px-4 rounded-3xl min-w-56 max-w-[80vw] text-center bg-gray-900 border border-gray-400 hover:ring-2 hover:ring-gray-200 hover:border-gray-100 duration-300 ease-in-out"
           >
             Click To Join
           </Link>
@@ -259,10 +262,12 @@ export default function LiveMeetingRoomPage() {
     );
   }
 
+  
+
   return (
     <main className="flex flex-col bg-gray-950">
       {/* --- Stream Meeting Content --- */}
-      <section className="">
+          <section className="">
         <div className="text-gray-400 italic">
           {/* 🎥 Meeting interface will render here (video, mic, screen share, etc.) */}
           {meetingData && (

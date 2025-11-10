@@ -61,10 +61,10 @@ const meetingSchema = new Schema<IMeetingDoc>(
       default: MeetingStatus.Scheduled,
     },
     startTime: {
-      type: Date,
+      type: Date,   // UTC (Coordinated Universal Time) format
     },
     endTime: {
-      type: Date,
+      type: Date,   // UTC (Coordinated Universal Time) format
     },
   },
   { timestamps: true }

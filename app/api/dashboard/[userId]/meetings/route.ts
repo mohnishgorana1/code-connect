@@ -42,7 +42,7 @@ export async function GET(
       .populate("candidate", "name email")
       .sort({ startTime: 1 });
 
-    console.log("meetngs", meetings)
+    console.log("meetngs", meetings);
 
     const now = new Date();
 
@@ -61,9 +61,17 @@ export async function GET(
         m.status === MeetingStatus.Completed
     );
 
+    const missedOrPendingMeetings = meetings.filter(
+      (m) =>
+        m.startTime &&
+        new Date(m.startTime) <= now &&
+        m.status !== MeetingStatus.Completed &&
+        m.status !== MeetingStatus.Cancelled
+    );
 
-    console.log("upcomings", upcomingMeetings)
-
+    console.log("upcomings", upcomingMeetings.length);
+    console.log("missedOrPending", missedOrPendingMeetings.length);
+    console.log("previous", previousMeetings.length);
 
     return NextResponse.json(
       {
@@ -72,6 +80,7 @@ export async function GET(
         data: {
           upcomingMeetings,
           previousMeetings,
+          missedOrPendingMeetings
         },
       },
       { status: 200 }

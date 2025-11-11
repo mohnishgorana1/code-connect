@@ -7,18 +7,27 @@ import axios from "axios";
 import { Briefcase, CalendarDays, Clock, User, Video } from "lucide-react";
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import Link from "next/link"; // Link is needed for join button
+import InterviewCard from "@/components/Dashboard/InterviewCard";
+import StatCard from "@/components/Dashboard/StatCard";
 
-function CandidateDashboardPage() {
+export default function CandidateDashboardPage() {
+  // Changed to default export
   const { appUser, loading } = useAppUser();
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [upcomingMeetings, setUpcomingMeetings] = useState<any[]>([]);
   const [previousMeetings, setPreviousMeetings] = useState<any[]>([]);
+  // ⭐ NEW STATE: Missed/Pending Meetings
+  const [missedOrPendingMeetings, setMissedOrPendingMeetings] = useState<any[]>(
+    []
+  );
 
   const fetchAllData = async () => {
     if (!appUser?._id) return;
     setIsDataLoading(true);
     try {
       const res = await axios.get(
+        // API endpoint is the same, but role is "candidate"
         `/api/dashboard/${appUser?._id}/meetings?role=${appUser?.role}`
       );
 
@@ -27,6 +36,8 @@ function CandidateDashboardPage() {
       if (data.success) {
         setUpcomingMeetings(data.data.upcomingMeetings || []);
         setPreviousMeetings(data.data.previousMeetings || []);
+        // ⭐ Update new state
+        setMissedOrPendingMeetings(data.data.missedOrPendingMeetings || []);
       }
     } catch (error) {
       console.error("Error fetching meetings:", error);
@@ -36,8 +47,15 @@ function CandidateDashboardPage() {
   };
 
   useEffect(() => {
-    fetchAllData();
-  }, []);
+    if (appUser?._id) {
+      // Ensure user ID exists before fetching
+      fetchAllData();
+    }
+  }, [appUser?._id]); // Dependency on appUser?._id ensures refetch after login/load
+
+  if (!loading && appUser?.role !== Role.Candidate) {
+    redirect("/");
+  }
 
   if (loading || isDataLoading) {
     return <Loader />;
@@ -45,7 +63,6 @@ function CandidateDashboardPage() {
 
   return (
     <section className="min-h-[80vh] text-gray-100 flex flex-col gap-10">
-      <button onClick={fetchAllData}>FetcData</button>
       {/* Welcome Section */}
       <div>
         <h1 className="text-3xl md:text-4xl font-extrabold text-cyan-500 capitalize">
@@ -62,31 +79,23 @@ function CandidateDashboardPage() {
           icon={<CalendarDays className="text-cyan-400 w-6 h-6" />}
           label="Upcoming Interviews"
           value={upcomingMeetings.length.toString()}
-          desc="This week"
+          desc="Scheduled sessions"
+        />
+        <StatCard
+          icon={<Clock className="text-pink-400 w-6 h-6" />}
+          label="Missed/Pending"
+          value={missedOrPendingMeetings.length.toString()}
+          desc="Follow up needed"
         />
         <StatCard
           icon={<Video className="text-purple-400 w-6 h-6" />}
           label="Completed"
           value={previousMeetings.length.toString()}
-          desc="Past sessions"
-        />
-        <StatCard
-          icon={<Clock className="text-pink-400 w-6 h-6" />}
-          label="Next Interview"
-          value={
-            upcomingMeetings[0]
-              ? new Date(upcomingMeetings[0].startTime).toLocaleDateString()
-              : "-"
-          }
-          desc={
-            upcomingMeetings[0]
-              ? new Date(upcomingMeetings[0].startTime).toLocaleTimeString()
-              : "No upcoming"
-          }
+          desc="Finished sessions"
         />
       </div>
 
-      {/* Profile Overview */}
+      {/* Profile Overview (Remains the same) */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
         <h2 className="text-xl font-semibold mb-4 text-gray-200">
           Profile Overview
@@ -125,8 +134,12 @@ function CandidateDashboardPage() {
               <InterviewCard
                 key={idx}
                 title={m.title}
+                isInterviewer={false}
+                interviewerName={m.interviewer?.name}
+                candidateName={m.candidate?.name}
                 date={new Date(m.startTime).toLocaleDateString()}
                 time={new Date(m.startTime).toLocaleTimeString()}
+                meetingId={m._id} // Pass meeting ID for join link
               />
             ))
           ) : (
@@ -134,55 +147,54 @@ function CandidateDashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Previous/Completed Interviews Section */}
+      {previousMeetings.length > 0 && (
+        <div>
+          <h2 className="text-xl font-semibold text-gray-200 mb-4 mt-6">
+            Completed Interviews
+          </h2>
+          <div className="bg-gray-900 border border-gray-800 rounded-xl divide-y divide-gray-800">
+            {previousMeetings.map((m, idx) => (
+              <InterviewCard
+                key={`previous-${idx}`}
+                title={m.title}
+                interviewerName={m.interviewer?.name}
+                candidateName={m.candidate?.name}
+                date={new Date(m.startTime).toLocaleDateString()}
+                time={new Date(m.startTime).toLocaleTimeString()}
+                isCompleted={true}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {missedOrPendingMeetings.length > 0 && (
+        <div className="border border-gray-700 rounded-xl p-4 bg-gray-900">
+          <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <Clock className="w-5 h-5" /> Missed or Pending Review 🔴
+          </h2>
+          <p className="text-sm text-gray-400 mb-4 font-bold">
+            The scheduled time for these interviews has passed, but the status
+            is not marked as completed. Please contact your interviewer/HR for
+            the next steps or to reschedule.
+          </p>
+          <div className="divide-y divide-gray-500">
+            {missedOrPendingMeetings.map((m, idx) => (
+              <InterviewCard
+                key={`missed-${idx}`}
+                title={m.title}
+                interviewerName={m.interviewer?.name}
+                candidateName={m.candidate?.name}
+                date={new Date(m.startTime).toLocaleDateString()}
+                time={new Date(m.startTime).toLocaleTimeString()}
+                isMissed={true} // Add a prop to highlight
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </section>
-  );
-}
-
-export default CandidateDashboardPage;
-
-function StatCard({
-  icon,
-  label,
-  value,
-  desc,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  desc: string;
-}) {
-  return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col items-start gap-3 hover:border-cyan-500 transition">
-      <div className="flex items-center gap-3">
-        {icon}
-        <h3 className="text-lg font-semibold">{label}</h3>
-      </div>
-      <p className="text-2xl font-bold">{value}</p>
-      <p className="text-gray-400 text-sm">{desc}</p>
-    </div>
-  );
-}
-
-function InterviewCard({
-  title,
-  date,
-  time,
-}: {
-  title: string;
-  date: string;
-  time: string;
-}) {
-  return (
-    <div className="p-4 flex justify-between items-center">
-      <div>
-        <p className="font-medium text-gray-100">{title}</p>
-        <p className="text-sm text-gray-400">
-          {date} • {time}
-        </p>
-      </div>
-      <button className="bg-cyan-700 hover:bg-cyan-800 text-white text-sm px-4 py-1.5 rounded-md transition">
-        Join
-      </button>
-    </div>
   );
 }

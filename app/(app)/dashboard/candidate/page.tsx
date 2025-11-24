@@ -74,7 +74,7 @@ export default function CandidateDashboardPage() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
         <StatCard
           icon={<CalendarDays className="text-cyan-400 w-6 h-6" />}
           label="Upcoming Interviews"
@@ -92,6 +92,20 @@ export default function CandidateDashboardPage() {
           label="Completed"
           value={previousMeetings.length.toString()}
           desc="Finished sessions"
+        />
+        <StatCard
+          icon={<Clock className="text-gray-400 w-6 h-6" />}
+          label="Next Interview"
+          value={
+            upcomingMeetings[0]
+              ? new Date(upcomingMeetings[0].startTime).toLocaleDateString()
+              : "-"
+          }
+          desc={
+            upcomingMeetings[0]
+              ? new Date(upcomingMeetings[0].startTime).toLocaleTimeString()
+              : "No upcoming"
+          }
         />
       </div>
 

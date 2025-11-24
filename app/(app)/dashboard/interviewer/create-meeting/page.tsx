@@ -13,13 +13,13 @@ export default function CreateMeeting() {
   return (
     <div className="p-8 grid md:grid-cols-5 w-full gap-x-4">
       <section className="md:col-span-2 flex  flex-col gap-y-2 md:gap-y-4 ">
-        <div className="bg-gray-800 p-4 rounded-xl shadow-lg border-l-4 border-cyan-500">
+        <div className="bg-gray-800 p-4 rounded-xl shadow-lg border-l-4 border-violet-500">
           <h1 className="text-xl font-bold text-white">
             Create Collaborative Meeting Portal
           </h1>
         </div>
         <div className="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-          <h2 className="text-xl font-semibold text-cyan-400 mb-3">
+          <h2 className="text-xl font-semibold text-violet-400 mb-3">
             Meeting Setup Guide
           </h2>
           <ul className="list-disc list-inside space-y-2 text-gray-300 ml-3">

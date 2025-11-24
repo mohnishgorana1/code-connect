@@ -93,7 +93,7 @@ export default function InterviewerDashboardPage() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
         <StatCard
           icon={<CalendarDays className="text-cyan-400 w-6 h-6" />}
           label="Upcoming Interviews"

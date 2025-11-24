@@ -222,7 +222,7 @@ function CreateNewMeetingForm() {
 
   // Calculate meeting link if available
   const meetingLink = createdMeeting
-    ? `${window.location.origin}/meeting/${createdMeeting._id}`
+    ? `${window.location.origin}/meeting/join?meetingId=${createdMeeting._id}`
     : null;
 
   return (
@@ -233,7 +233,9 @@ function CreateNewMeetingForm() {
           : "max-w-lg"
       } mx-auto bg-gray-900 text-gray-50 shadow-2xl rounded-xl border border-gray-700`}
     >
-      <h1 className="text-3xl font-extrabold text-cyan-400 mb-6 border-b border-gray-700 pb-2">
+      <h1
+        className={`text-3xl font-extrabold text-violet-400 mb-6 border-b border-gray-700 pb-2`}
+      >
         Schedule New Interview
       </h1>
 
@@ -440,7 +442,5 @@ function CreateNewMeetingForm() {
     </main>
   );
 }
-
-
 
 export default CreateNewMeetingForm;

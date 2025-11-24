@@ -31,10 +31,17 @@ export default function JoinPage() {
         if (res.data.success) {
           router.push(`/meeting/${meetingIdFromUrl}`);
         } else {
-          setError(res.data.message || "Unable to join meeting.");
+          if (meetingIdFromUrl) {
+            setError(
+              `${res.data.message}. Meeting ID: ${meetingIdFromUrl}` ||
+                "Unable to join meeting."
+            );
+          } else {
+            setError(`${res.data.message}` || "Unable to join meeting.");
+          }
         }
       } catch (err: any) {
-        setError(err.response?.data?.message || "Failed to join meeting.");
+        setError(`${err.response?.data?.message} Meeting ID: ${meetingIdFromUrl}` || "Failed to join meeting.");
       } finally {
         setIsJoining(false);
       }
